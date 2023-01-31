@@ -4,10 +4,8 @@ import {
   Route,
 } from 'react-router-dom'
 
-function Test() {
-  return <div>Test</div>
-}
+import { Home } from './pages'
 
-const elements = <Route path="/" element={<Test />}></Route>
+const elements = <Route path="/" element={<Home />}></Route>
 
 export const router = createBrowserRouter(createRoutesFromElements(elements))
