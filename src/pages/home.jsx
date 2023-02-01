@@ -1,5 +1,12 @@
+import { Link } from 'react-router-dom'
+
 import { Title } from '@/features/ui'
 
 export function Home() {
-  return <Title text="Welcome home!" />
+  return (
+    <div>
+      <Title text="Welcome home!" />
+      <Link to="/about">About</Link>
+    </div>
+  )
 }

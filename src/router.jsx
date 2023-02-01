@@ -4,8 +4,14 @@ import {
   Route,
 } from 'react-router-dom'
 
-import { Home } from './pages'
+import { App } from '@/features/layout'
+import { About, Home } from '@/pages'
 
-const elements = <Route path="/" element={<Home />}></Route>
+const elements = (
+  <Route path="/" element={<App />}>
+    <Route index={true} element={<Home />} />
+    <Route path="/about" element={<About />} />
+  </Route>
+)
 
 export const router = createBrowserRouter(createRoutesFromElements(elements))
