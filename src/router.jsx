@@ -6,29 +6,22 @@ import {
 
 import { App } from '@/features/layout'
 import { RequireAuth } from '@/features/users'
-import {
-  About,
-  Error as ErrorPage,
-  Home,
-  Login,
-  Profile,
-  SignUp,
-} from '@/pages'
+import * as pages from '@/pages'
 
 const elements = (
-  <Route path="/" element={<App />} errorElement={<ErrorPage />}>
-    <Route index={true} element={<Home />} />
-    <Route path="/about" element={<About />} />
+  <Route path="/" element={<App />} errorElement={<pages.Error />}>
+    <Route index={true} element={<pages.Home />} />
+    <Route path="/about" element={<pages.About />} />
     <Route
       path="/profile"
       element={
         <RequireAuth>
-          <Profile />
+          <pages.Profile />
         </RequireAuth>
       }
     />
-    <Route path="/login" element={<Login />} />
-    <Route path="/signup" element={<SignUp />} />
+    <Route path="/login" element={<pages.Login />} />
+    <Route path="/signup" element={<pages.SignUp />} />
   </Route>
 )
 
