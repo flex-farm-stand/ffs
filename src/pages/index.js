@@ -1,4 +1,5 @@
 export { About } from './about'
+export { Error } from './error'
 export { Profile } from './profile'
 export { Home } from './home'
 export { Login } from './login'
