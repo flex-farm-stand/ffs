@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 
 import { Header } from '@/features/layout'
-import { useDarkMode } from '@/features/ui'
+import { DarkModeContext, useDarkMode } from '@/features/ui'
 import { AuthContext, supabase } from '@/features/users'
 import { GlobalStyle } from './global-style'
 import { themes } from './themes'
@@ -18,7 +18,7 @@ const Button = styled.button`
 
 export function App() {
   const [user, setUser] = useState(null)
-  const [mode, effectiveMode, setMode] = useDarkMode()
+  const [theme, effectiveTheme, setTheme] = useDarkMode()
 
   useEffect(() => {
     initializeAuthProvider()
@@ -72,20 +72,22 @@ export function App() {
 
   return (
     <AuthContext.Provider value={{ loginWithPassword, logout, signUp, user }}>
-      <ThemeProvider theme={themes[effectiveMode]}>
-        <div className="app">
-          <GlobalStyle />
-          <Header />
-          <div>
-            <p>Current mode: {mode}</p>
-            <p>Current effective mode: {effectiveMode}</p>
-            <Button onClick={() => setMode('light')}>Light</Button>
-            <Button onClick={() => setMode('auto')}>Auto</Button>
-            <Button onClick={() => setMode('dark')}>Dark</Button>
+      <DarkModeContext.Provider value={{ theme, effectiveTheme, setTheme }}>
+        <ThemeProvider theme={themes[effectiveTheme]}>
+          <div className="app">
+            <GlobalStyle />
+            <Header />
+            <div>
+              <p>Current theme: {theme}</p>
+              <p>Current effective mode: {effectiveTheme}</p>
+              <Button onClick={() => setTheme('light')}>Light</Button>
+              <Button onClick={() => setTheme('auto')}>Auto</Button>
+              <Button onClick={() => setTheme('dark')}>Dark</Button>
+            </div>
+            <Outlet />
           </div>
-          <Outlet />
-        </div>
-      </ThemeProvider>
+        </ThemeProvider>
+      </DarkModeContext.Provider>
     </AuthContext.Provider>
   )
 }

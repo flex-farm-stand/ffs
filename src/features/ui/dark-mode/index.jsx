@@ -1,29 +1,37 @@
-import { useEffect, useState } from 'react'
-
-const classNameDark = 'dark-mode'
-const classNameLight = 'light-mode'
-const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)')
-const initialValueMode = window.localStorage.getItem('dark-mode')
-const initialValueEffectiveMode =
-  initialValueMode === 'light' || initialValueMode === 'dark'
-    ? initialValueMode
-    : darkModeQuery.matches
-    ? 'dark'
-    : 'light'
-
 // Inspired by the following blog posts:
 // https://www.jonathan-harrell.com/blog/system-based-theming-with-styled-components/
 // https://www.smashingmagazine.com/2020/04/dark-mode-react-apps-styled-components/
+import { createContext, useContext, useEffect, useState } from 'react'
+
+const classNameDark = 'dark-theme'
+const classNameLight = 'light-theme'
+const darkThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+const initialValueTheme = window.localStorage.getItem('dark-theme')
+const initialValueEffectiveTheme =
+  initialValueTheme === 'light' || initialValueTheme === 'dark'
+    ? initialValueTheme
+    : darkThemeQuery.matches
+    ? 'dark'
+    : 'light'
+
+export const DarkModeContext = createContext({
+  theme: '',
+  effectiveTheme: '',
+  setTheme: () => {},
+})
+
 export function useDarkMode() {
-  const [mode, setMode] = useState(initialValueMode)
-  const [effectiveMode, setEffectiveMode] = useState(initialValueEffectiveMode)
+  const [theme, setTheme] = useState(initialValueTheme)
+  const [effectiveTheme, setEffectiveTheme] = useState(
+    initialValueEffectiveTheme
+  )
 
   useEffect(() => {
-    darkModeQuery.addListener(handleQueryChange)
-    return () => darkModeQuery.removeListener(handleQueryChange)
+    darkThemeQuery.addListener(handleQueryChange)
+    return () => darkThemeQuery.removeListener(handleQueryChange)
   })
-  function applyMode(newMode) {
-    switch (newMode) {
+  function applyTheme(newTheme) {
+    switch (newTheme) {
       case 'light':
         setLight()
         break
@@ -34,27 +42,31 @@ export function useDarkMode() {
         setAuto()
         break
       default:
-        throw new Error('Unsupported dark mode value')
+        throw new Error('Unsupported dark theme value')
     }
-    setMode(newMode)
-    window.localStorage.setItem('dark-mode', newMode)
+    setTheme(newTheme)
+    window.localStorage.setItem('dark-theme', newTheme)
   }
   function handleQueryChange(e) {
-    mode === 'auto' && e.matches ? setDark() : setLight()
+    theme === 'auto' && e.matches ? setDark() : setLight()
   }
   function setLight() {
     document.querySelector('html').classList.remove(classNameDark)
     document.querySelector('html').classList.add(classNameLight)
-    setEffectiveMode('light')
+    setEffectiveTheme('light')
   }
   function setDark() {
     document.querySelector('html').classList.remove(classNameLight)
     document.querySelector('html').classList.add(classNameDark)
-    setEffectiveMode('dark')
+    setEffectiveTheme('dark')
   }
   function setAuto() {
-    darkModeQuery.matches ? setDark() : setLight()
+    darkThemeQuery.matches ? setDark() : setLight()
   }
 
-  return [mode, effectiveMode, applyMode]
+  return [theme, effectiveTheme, applyTheme]
+}
+
+export function useDarkModeContext() {
+  return useContext(DarkModeContext)
 }
