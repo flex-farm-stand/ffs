@@ -1,14 +1,23 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
+import styled, { ThemeProvider } from 'styled-components'
 
-import { Header } from '@/features/ui'
+import { useDarkMode, Header } from '@/features/ui'
 import { AuthContext, supabase } from '@/features/users'
+import { GlobalStyle } from './global-style'
+import { themes } from './themes'
 
 const signUpSuccessText =
   'Check your email. Email verification needed to complete your sign up.'
 
+const Button = styled.button`
+  background-color: ${({ theme }) => theme.button.bg};
+  color: ${({ theme }) => theme.button.text};
+`
+
 export function App() {
   const [user, setUser] = useState(null)
+  const [mode, effectiveMode, setMode] = useDarkMode()
 
   useEffect(() => {
     initializeAuthProvider()
@@ -62,10 +71,20 @@ export function App() {
 
   return (
     <AuthContext.Provider value={{ loginWithPassword, logout, signUp, user }}>
-      <div className="app">
-        <Header />
-        <Outlet />
-      </div>
+      <ThemeProvider theme={themes[effectiveMode]}>
+        <div className="app">
+          <GlobalStyle />
+          <Header />
+          <div>
+            <p>Current mode: {mode}</p>
+            <p>Current effective mode: {effectiveMode}</p>
+            <Button onClick={() => setMode('light')}>Light</Button>
+            <Button onClick={() => setMode('auto')}>Auto</Button>
+            <Button onClick={() => setMode('dark')}>Dark</Button>
+          </div>
+          <Outlet />
+        </div>
+      </ThemeProvider>
     </AuthContext.Provider>
   )
 }
