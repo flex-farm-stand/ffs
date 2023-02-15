@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 
-import { Header } from '@/features/layout'
+import { Nav } from '@/features/layout'
 import { DarkModeContext, useDarkMode } from '@/features/ui'
 import { AuthContext, supabase } from '@/features/users'
 import { GlobalStyle } from './global-style'
@@ -76,7 +76,7 @@ export function App() {
         <ThemeProvider theme={themes[effectiveTheme]}>
           <div className="app">
             <GlobalStyle />
-            <Header />
+            <Nav />
             <div>
               <p>Current theme: {theme}</p>
               <p>Current effective mode: {effectiveTheme}</p>

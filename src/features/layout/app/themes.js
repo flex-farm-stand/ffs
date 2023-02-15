@@ -8,7 +8,7 @@ export const themes = {
       bg: 'red',
       text: 'black',
     },
-    header: {
+    nav: {
       bg: '#444',
       text: '#fff',
     },
@@ -29,7 +29,7 @@ export const themes = {
       bg: 'yellow',
       text: 'black',
     },
-    header: {
+    nav: {
       bg: '#333',
       text: '#fff',
     },

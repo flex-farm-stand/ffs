@@ -21,7 +21,7 @@ function MenuButton({ className }) {
   )
 }
 const StyledMenuButton = styled(MenuButton)`
-  color: ${({ theme: { header } }) => header.text};
+  color: ${({ theme }) => theme.nav.text};
 `
 
 // ---

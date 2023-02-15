@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import { Logo } from '@/features/ui'
 import { StyledMenu } from './styled-menu'
 
-const pagesWithoutHeader = ['/login', '/signup']
+const pagesWithoutNav = ['/login', '/signup']
 
 // ---
-const HeaderBody = styled.div.attrs({ className: 'header-body' })`
+const NavBody = styled.div.attrs({ className: 'nav-body' })`
   align-items: center;
   background-color: inherit;
   display: flex;
@@ -17,9 +17,9 @@ const HeaderBody = styled.div.attrs({ className: 'header-body' })`
 `
 
 // ---
-const HeaderRoot = styled.header.attrs({ className: 'header-root' })`
-  background-color: ${({ theme }) => theme.header.bg};
-  color: ${({ theme }) => theme.header.text};
+const NavRoot = styled.nav.attrs({ className: 'nav-root' })`
+  background-color: ${({ theme }) => theme.nav.bg};
+  color: ${({ theme }) => theme.nav.text};
 `
 
 // ---
@@ -31,25 +31,25 @@ function VanillaLogoLink({ className }) {
   )
 }
 const LogoLink = styled(VanillaLogoLink).attrs({ className: 'logo-link' })`
-  color: ${({ theme }) => theme.header.text};
+  color: ${({ theme }) => theme.nav.text};
   text-decoration: none;
 `
 
 // ---
-export function Header() {
+export function Nav() {
   const location = useLocation()
 
-  // Hide header on specific pages
-  if (pagesWithoutHeader.includes(location.pathname)) {
+  // Hide nav on specific pages
+  if (pagesWithoutNav.includes(location.pathname)) {
     return null
   }
 
   return (
-    <HeaderRoot>
-      <HeaderBody>
+    <NavRoot>
+      <NavBody>
         <LogoLink />
         <StyledMenu />
-      </HeaderBody>
-    </HeaderRoot>
+      </NavBody>
+    </NavRoot>
   )
 }
