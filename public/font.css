@@ -1,0 +1,7 @@
+/* Font for logo text */
+/* https://fonts.google.com/specimen/Bubbler+One?query=bubbler */
+@font-face {
+  font-family: 'BubblerOne';
+  src: local('BubblerOne'), url('/BubblerOne.ttf') format('truetype');
+}
+

@@ -8,6 +8,10 @@ export const themes = {
       bg: 'red',
       text: 'black',
     },
+    header: {
+      bg: '#444',
+      text: '#fff',
+    },
   },
   dark: {
     body: {
@@ -17,6 +21,10 @@ export const themes = {
     button: {
       bg: 'yellow',
       text: 'black',
+    },
+    header: {
+      bg: '#333',
+      text: '#fff',
     },
   },
 }

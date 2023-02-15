@@ -1,5 +1,5 @@
 export { Button } from './button'
 export { FormGroup } from './form-group'
-export { Header } from './header'
+export { Logo } from './logo'
 export { Title } from './title'
 export { useDarkMode } from './dark-mode'
