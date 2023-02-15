@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Logo } from '@/features/ui'
+import { StyledMenu } from './styled-menu'
 
 const pagesWithoutHeader = ['/login', '/signup']
 
@@ -34,6 +35,7 @@ const LogoLink = styled(VanillaLogoLink).attrs({ className: 'logo-link' })`
   text-decoration: none;
 `
 
+// ---
 export function Header() {
   const location = useLocation()
 
@@ -46,6 +48,7 @@ export function Header() {
     <HeaderRoot>
       <HeaderBody>
         <LogoLink />
+        <StyledMenu />
       </HeaderBody>
     </HeaderRoot>
   )

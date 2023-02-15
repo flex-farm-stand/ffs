@@ -12,6 +12,13 @@ export const themes = {
       bg: '#444',
       text: '#fff',
     },
+    menu: {
+      bg: '#ddd',
+      border: '#aaa',
+      hoverBg: '#bbb',
+      selectedBg: '#888',
+      text: '#000',
+    },
   },
   dark: {
     body: {
@@ -24,6 +31,13 @@ export const themes = {
     },
     header: {
       bg: '#333',
+      text: '#fff',
+    },
+    menu: {
+      bg: '#333',
+      border: '#555',
+      hoverBg: '#444',
+      selectedBg: '#222',
       text: '#fff',
     },
   },
