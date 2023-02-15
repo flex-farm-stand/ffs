@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import styled, { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from 'styled-components'
 
 import { Nav } from '@/features/layout'
 import { DarkModeContext, useDarkMode } from '@/features/ui'
@@ -10,11 +10,6 @@ import { themes } from './themes'
 
 const signUpSuccessText =
   'Check your email. Email verification needed to complete your sign up.'
-
-const Button = styled.button`
-  background-color: ${({ theme }) => theme.button.bg};
-  color: ${({ theme }) => theme.button.text};
-`
 
 export function App() {
   const [user, setUser] = useState(null)
@@ -77,13 +72,6 @@ export function App() {
           <div className="app">
             <GlobalStyle />
             <Nav />
-            <div>
-              <p>Current theme: {theme}</p>
-              <p>Current effective mode: {effectiveTheme}</p>
-              <Button onClick={() => setTheme('light')}>Light</Button>
-              <Button onClick={() => setTheme('auto')}>Auto</Button>
-              <Button onClick={() => setTheme('dark')}>Dark</Button>
-            </div>
             <Outlet />
           </div>
         </ThemeProvider>
