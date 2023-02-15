@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom'
 
 import { Header } from '@/features/ui'
 import { AuthContext, supabase } from '@/features/users'
-import './app.css'
 
 const signUpSuccessText =
   'Check your email. Email verification needed to complete your sign up.'
