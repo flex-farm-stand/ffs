@@ -4,10 +4,6 @@ export const themes = {
       bg: '#fff',
       text: '#000',
     },
-    button: {
-      bg: 'red',
-      text: 'black',
-    },
     nav: {
       bg: '#444',
       text: '#fff',
@@ -24,10 +20,6 @@ export const themes = {
     body: {
       bg: '#222',
       text: '#ddd',
-    },
-    button: {
-      bg: 'yellow',
-      text: 'black',
     },
     nav: {
       bg: '#333',
