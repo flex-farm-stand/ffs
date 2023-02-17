@@ -1,7 +1,8 @@
-import { Link, useLocation } from 'react-router-dom'
-import styled from 'styled-components'
+import { useContext } from 'react'
+import { useLocation } from 'react-router-dom'
+import styled, { ThemeContext } from 'styled-components'
 
-import { Logo } from '@/features/ui'
+import { LogoLink } from '@/features/ui'
 import { StyledMenu } from './styled-menu'
 
 const pagesWithoutNav = ['/login', '/signup']
@@ -23,21 +24,9 @@ const NavRoot = styled.nav.attrs({ className: 'nav-root' })`
 `
 
 // ---
-function VanillaLogoLink({ className }) {
-  return (
-    <Link className={className} to="/">
-      <Logo displayText={true} />
-    </Link>
-  )
-}
-const LogoLink = styled(VanillaLogoLink).attrs({ className: 'logo-link' })`
-  color: ${({ theme }) => theme.nav.text};
-  text-decoration: none;
-`
-
-// ---
 export function Nav() {
   const location = useLocation()
+  const themeContext = useContext(ThemeContext)
 
   // Hide nav on specific pages
   if (pagesWithoutNav.includes(location.pathname)) {
@@ -47,7 +36,7 @@ export function Nav() {
   return (
     <NavRoot>
       <NavBody>
-        <LogoLink />
+        <LogoLink color={themeContext.nav.text} displayText={true} />
         <StyledMenu />
       </NavBody>
     </NavRoot>

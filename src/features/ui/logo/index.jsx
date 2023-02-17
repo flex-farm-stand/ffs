@@ -1,11 +1,14 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-
 import { ReactComponent as LogoImage } from './logo.svg'
 
 const LogoContainer = styled.div`
   align-items: center;
+  color: ${({ color }) => color};
   display: flex;
+  justify-content: center;
   padding: 2px;
+  text-align: left;
 `
 
 const LogoText = styled.div`
@@ -21,9 +24,9 @@ const LogoText = styled.div`
   }
 `
 
-export function Logo({ className, displayText = false }) {
+export function Logo({ className, color = 'cyan', displayText = false }) {
   return (
-    <LogoContainer className={className}>
+    <LogoContainer color={color} className={className}>
       <LogoImage />
       {displayText && (
         <LogoText>
@@ -34,3 +37,26 @@ export function Logo({ className, displayText = false }) {
     </LogoContainer>
   )
 }
+
+function VanillaLogoLink({
+  className,
+  color = 'cyan',
+  to = '/',
+  displayText = false,
+}) {
+  return (
+    <Link className={className} to={to}>
+      <Logo color={color} displayText={displayText} />
+    </Link>
+  )
+}
+
+export const LogoLink = styled(VanillaLogoLink).attrs({
+  className: 'logo-link',
+})`
+  &,
+  &:hover {
+    color: ${({ color }) => color};
+    text-decoration: none;
+  }
+`
