@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
-import { Title } from '@/features/ui'
 import { SignUpForm, useAuth } from '@/features/users'
 
 export function SignUp() {
   const auth = useAuth()
   const [email, setEmail] = useState('')
-  const [formFeedback, setFormFeedback] = useState(null)
+  const [formFeedback, setFormFeedback] = useState({ status: '', message: '' })
   const [password, setPassword] = useState('')
 
   function handleEmailChange(e) {
@@ -16,28 +15,22 @@ export function SignUp() {
   function handlePasswordChange(e) {
     setPassword(e.target.value)
   }
-  async function handleSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault()
     const result = await auth.signUp({ email, password })
     setFormFeedback(result)
   }
 
-  return (
-    <div>
-      <Title text="Sign Up" />
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-      </ul>
-      <SignUpForm
-        email={email}
-        formFeedback={formFeedback}
-        handleEmailChange={handleEmailChange}
-        handlePasswordChange={handlePasswordChange}
-        handleSubmit={handleSubmit}
-        password={password}
-      />
-    </div>
+  return auth.user ? (
+    <Navigate to="/profile" />
+  ) : (
+    <SignUpForm
+      email={email}
+      formFeedback={formFeedback}
+      handleEmailChange={handleEmailChange}
+      handlePasswordChange={handlePasswordChange}
+      onSubmit={onSubmit}
+      password={password}
+    />
   )
 }

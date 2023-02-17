@@ -4,6 +4,12 @@ export const themes = {
       bg: '#fff',
       text: '#000',
     },
+    form: {
+      bg: '#fff',
+      border: '#A3A3A3',
+      text: '#222',
+      title: '#000',
+    },
     nav: {
       bg: '#444',
       text: '#fff',
@@ -20,6 +26,12 @@ export const themes = {
     body: {
       bg: '#222',
       text: '#ddd',
+    },
+    form: {
+      bg: '#404040',
+      border: '#737373',
+      text: '#D1D5DB',
+      title: '#fff',
     },
     nav: {
       bg: '#333',
