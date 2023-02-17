@@ -22,6 +22,9 @@ export const Item = styled(VanillaMenuItem).attrs({ className: 'menu-item' })`
     display: block;
     text-decoration: none;
   }
+  a: hover {
+    text-decoration: none;
+  }
   button {
     background-color: inherit;
     border: none;
