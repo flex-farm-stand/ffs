@@ -27,6 +27,7 @@ export function SignUpForm({
       <LogoLink color={themeContext.form.title} displayText={true} />
       <Title text="Sign up" />
       <FormGroup
+        autoFocus={true}
         placeholder="Enter email"
         type="email"
         value={email}
@@ -40,7 +41,7 @@ export function SignUpForm({
       />
       <FormFeedback feedback={formFeedback} />
       <ButtonGroup>
-        <Button text="Create account" type="submit" />
+        <Button text="Create" type="submit" />
         <Link to="/login">Login instead</Link>
       </ButtonGroup>
     </Form>

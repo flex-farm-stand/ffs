@@ -27,6 +27,7 @@ export function LoginForm({
       <LogoLink color={themeContext.form.title} displayText={true} />
       <Title text="Login" />
       <FormGroup
+        autoFocus={true}
         placeholder="Enter email"
         type="email"
         value={email}
