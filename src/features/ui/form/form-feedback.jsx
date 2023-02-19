@@ -1,17 +1,13 @@
 import styled from 'styled-components'
 
 function VanillaFormFeedback({ className, feedback }) {
-  return (
-    <p className={className} type={feedback.type}>
-      {feedback.message}
-    </p>
-  )
+  return feedback.message && <p className={className}>{feedback.message}</p>
 }
 
 export const FormFeedback = styled(VanillaFormFeedback).attrs({
   clasName: 'feedback',
 })`
-  color: ${({ type }) => (type === 'success' ? 'green' : 'red')};
-  height: 2rem;
+  color: ${({ feedback }) =>
+    feedback.status === 'success' ? '#94c973' : 'red'};
   text-align: left;
 `
