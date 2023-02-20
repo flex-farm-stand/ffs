@@ -13,7 +13,13 @@ export function Profile() {
   const [email, setEmail] = useState(auth.user.email)
   const [formFeedback, setFormFeedback] = useState(initialValueFormFeedback)
   const [password, setPassword] = useState('')
+  const [displayName, setDisplayName] = useState(
+    auth.user.data?.displayName || ''
+  )
 
+  function handleDisplayNameChange(e) {
+    setDisplayName(e.target.value)
+  }
   function handleEmailChange(e) {
     setEmail(e.target.value)
   }
@@ -24,10 +30,12 @@ export function Profile() {
     e.preventDefault()
     setFormFeedback(initialValueFormFeedback)
     const emailChange = email && email !== auth.user.email
-    const result = await supabase.auth.updateUser({
+    const profile = {
       email,
       password,
-    })
+      data: { displayName },
+    }
+    const result = await supabase.auth.updateUser(profile)
     setFormFeedback(
       result.error
         ? { status: 'failure', message: result.error.message }
@@ -42,8 +50,10 @@ export function Profile() {
 
   return (
     <ProfileForm
+      displayName={displayName}
       email={email}
       formFeedback={formFeedback}
+      handleDisplayNameChange={handleDisplayNameChange}
       handleEmailChange={handleEmailChange}
       handlePasswordChange={handlePasswordChange}
       onSubmit={onSubmit}

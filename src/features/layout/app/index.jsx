@@ -27,6 +27,7 @@ export function App() {
       session && {
         email: session.user.email,
         id: session.user.id,
+        displayName: session.user.user_metadata.displayName || '',
       }
     )
 
@@ -38,6 +39,7 @@ export function App() {
         setUser({
           email: session.user.email,
           id: session.user.id,
+          displayName: session.user.user_metadata.displayName || '',
         })
       }
     })

@@ -35,12 +35,14 @@ const Form = styled(OriginalForm)`
 `
 
 export function ProfileForm({
+  displayName,
   email,
   formFeedback,
   handleEmailChange,
   handlePasswordChange,
-  onSubmit,
+  handleDisplayNameChange,
   password,
+  onSubmit,
 }) {
   return (
     <Form onSubmit={onSubmit}>
@@ -61,6 +63,14 @@ export function ProfileForm({
         type="password"
         value={password}
         onChange={handlePasswordChange}
+      />
+      <FormGroup
+        label={true}
+        labelText="Name:"
+        placeholder="Enter publicly displayed name"
+        type="text"
+        value={displayName}
+        onChange={handleDisplayNameChange}
       />
       <FormFeedback feedback={formFeedback} />
       <Button text="Update" type="submit" />
