@@ -34,7 +34,7 @@ export function App() {
     supabase.auth.onAuthStateChange((e, session) => {
       if (e === 'SIGNED_OUT') {
         setUser(null)
-      } else if (e === 'SIGNED_IN') {
+      } else if (e === 'SIGNED_IN' || e === 'USER_UPDATED') {
         setUser({
           email: session.user.email,
           id: session.user.id,
