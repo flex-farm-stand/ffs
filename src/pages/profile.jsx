@@ -13,9 +13,7 @@ export function Profile() {
   const [email, setEmail] = useState(auth.user.email)
   const [formFeedback, setFormFeedback] = useState(initialValueFormFeedback)
   const [password, setPassword] = useState('')
-  const [displayName, setDisplayName] = useState(
-    auth.user.data?.displayName || ''
-  )
+  const [displayName, setDisplayName] = useState(auth.user.displayName || '')
 
   function handleDisplayNameChange(e) {
     setDisplayName(e.target.value)
