@@ -15,32 +15,53 @@ export function App() {
   const [user, setUser] = useState(null)
   const [theme, effectiveTheme, setTheme] = useDarkMode()
 
+  // Retreive auth info from Supabase API on page load
   useEffect(() => {
     initializeAuthProvider()
   }, [])
-  async function initializeAuthProvider() {
-    // Retreive auth info from Supabase API on page load
+  async function retrieveSession() {
     const {
       data: { session },
     } = await supabase.auth.getSession()
-    setUser(
-      session && {
-        email: session.user.email,
-        id: session.user.id,
-        displayName: session.user.user_metadata.displayName || '',
-      }
-    )
+    return session
+  }
+  async function retrieveUser(session) {
+    // Fail gracefully if session doesn't exist
+    if (!session) {
+      return null
+    }
+
+    // Get the rest of the user's profile
+    const currentUser = {
+      email: session.user.email,
+      id: session.user.id,
+    }
+    const response = await supabase
+      .from('profiles')
+      .select()
+      .eq('id', currentUser.id)
+
+    if (response.error) {
+      throw new Error('Unable to query the profiles table')
+    } else if (!response.data || response.data.length !== 1) {
+      throw new Error('Match not found in profiles table')
+    }
+    currentUser.displayName = response.data[0].display_name
+
+    return currentUser
+  }
+  async function initializeAuthProvider() {
+    const session = await retrieveSession()
+    const currentUser = await retrieveUser(session)
+    setUser(currentUser)
 
     // Set callback for auth events
-    supabase.auth.onAuthStateChange((e, session) => {
+    supabase.auth.onAuthStateChange(async (e, session) => {
       if (e === 'SIGNED_OUT') {
         setUser(null)
       } else if (e === 'SIGNED_IN' || e === 'USER_UPDATED') {
-        setUser({
-          email: session.user.email,
-          id: session.user.id,
-          displayName: session.user.user_metadata.displayName || '',
-        })
+        const currentUser = await retrieveUser(session)
+        setUser(currentUser)
       }
     })
   }

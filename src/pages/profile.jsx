@@ -1,61 +1,90 @@
 import { useState } from 'react'
 
-import { ProfileForm, supabase, useAuth } from '@/features/users'
+import { AccountForm, ProfileForm, supabase, useAuth } from '@/features/users'
 
-const passwordChangeSuccessText = 'Your password has been updated'
-const emailChangeSuccessText =
+const successEmailChange =
   'Check your email - both the old and new email addresses. Two email ' +
   'verifications links need to be clicked to confirm the change you requested.'
-const initialValueFormFeedback = { status: '', message: '' }
+const successPasswordChange = 'Your password has been updated'
+const successNameChange = 'Your name has been updated'
+const initialFeedback = { status: '', message: '' }
 
 export function Profile() {
   const auth = useAuth()
+  const [editingAccount, setEditingAccount] = useState(false)
+  const [editingProfile, setEditingProfile] = useState(false)
   const [email, setEmail] = useState(auth.user.email)
-  const [formFeedback, setFormFeedback] = useState(initialValueFormFeedback)
+  const [feedbackAccount, setFeedbackAccount] = useState(initialFeedback)
+  const [feedbackProfile, setFeedbackProfile] = useState(initialFeedback)
+  const [name, setName] = useState(auth.user.displayName || '')
   const [password, setPassword] = useState('')
-  const [displayName, setDisplayName] = useState(auth.user.displayName || '')
 
   function handleDisplayNameChange(e) {
-    setDisplayName(e.target.value)
+    setName(e.target.value)
+    setEditingProfile(true)
   }
   function handleEmailChange(e) {
     setEmail(e.target.value)
+    setEditingAccount(true)
   }
   function handlePasswordChange(e) {
     setPassword(e.target.value)
+    setEditingAccount(true)
   }
-  async function onSubmit(e) {
+  async function onSubmitAccount(e) {
     e.preventDefault()
-    setFormFeedback(initialValueFormFeedback)
+    setFeedbackAccount(initialFeedback)
     const emailChange = email && email !== auth.user.email
     const profile = {
       email,
       password,
-      data: { displayName },
     }
     const result = await supabase.auth.updateUser(profile)
-    setFormFeedback(
+
+    setEditingAccount(false)
+    setFeedbackAccount(
       result.error
         ? { status: 'failure', message: result.error.message }
         : {
             status: 'success',
-            message: emailChange
-              ? emailChangeSuccessText
-              : passwordChangeSuccessText,
+            message: emailChange ? successEmailChange : successPasswordChange,
           }
+    )
+  }
+  async function onSubmitProfile(e) {
+    e.preventDefault()
+    setFeedbackProfile(initialFeedback)
+    const result = await supabase
+      .from('profiles')
+      .update({ display_name: name })
+      .eq('id', auth.user.id)
+
+    setEditingProfile(false)
+    setFeedbackProfile(
+      result.error
+        ? { status: 'failure', message: result.error.message }
+        : { status: 'success', message: successNameChange }
     )
   }
 
   return (
-    <ProfileForm
-      displayName={displayName}
-      email={email}
-      formFeedback={formFeedback}
-      handleDisplayNameChange={handleDisplayNameChange}
-      handleEmailChange={handleEmailChange}
-      handlePasswordChange={handlePasswordChange}
-      onSubmit={onSubmit}
-      password={password}
-    />
+    <>
+      <AccountForm
+        editing={editingAccount}
+        email={email}
+        formFeedback={feedbackAccount}
+        handleEmailChange={handleEmailChange}
+        handlePasswordChange={handlePasswordChange}
+        onSubmit={onSubmitAccount}
+        password={password}
+      />
+      <ProfileForm
+        editing={editingProfile}
+        formFeedback={feedbackProfile}
+        handleDisplayNameChange={handleDisplayNameChange}
+        name={name}
+        onSubmit={onSubmitProfile}
+      />
+    </>
   )
 }
