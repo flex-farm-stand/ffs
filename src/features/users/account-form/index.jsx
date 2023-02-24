@@ -35,20 +35,35 @@ const Form = styled(OriginalForm)`
   }
 `
 
+const FormControls = styled.div`
+  button {
+    font-size: 0.8rem;
+  }
+  button:first-child {
+    margin-right: 5px;
+  }
+`
+
 export function AccountForm({
   editing,
   email,
   formFeedback,
   handleEmailChange,
   handlePasswordChange,
-  password,
   onSubmit,
+  password,
+  reset,
 }) {
   return (
     <Form onSubmit={onSubmit}>
       <ButtonGroup>
         <Title text="Account details" />
-        {editing && <Button text="Update" type="submit" />}
+        {editing && (
+          <FormControls>
+            <Button onClick={reset} style="muted" text="Cancel" />
+            <Button text="Update" type="submit" />
+          </FormControls>
+        )}
       </ButtonGroup>
       <FormGroup
         autoFocus={true}

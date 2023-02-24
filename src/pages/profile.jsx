@@ -66,6 +66,15 @@ export function Profile() {
         : { status: 'success', message: successNameChange }
     )
   }
+  function resetAccount() {
+    setEmail(auth.user.email)
+    setPassword('')
+    setEditingAccount(false)
+  }
+  function resetProfile() {
+    setName(auth.user.displayName || '')
+    setEditingProfile(false)
+  }
 
   return (
     <>
@@ -77,6 +86,7 @@ export function Profile() {
         handlePasswordChange={handlePasswordChange}
         onSubmit={onSubmitAccount}
         password={password}
+        reset={resetAccount}
       />
       <ProfileForm
         editing={editingProfile}
@@ -84,6 +94,7 @@ export function Profile() {
         handleDisplayNameChange={handleDisplayNameChange}
         name={name}
         onSubmit={onSubmitProfile}
+        reset={resetProfile}
       />
     </>
   )

@@ -34,6 +34,14 @@ const Form = styled(OriginalForm)`
     width: calc(80% - 15px - 4px - 0.8rem);
   }
 `
+const FormControls = styled.div`
+  button {
+    font-size: 0.8rem;
+  }
+  button:first-child {
+    margin-right: 5px;
+  }
+`
 
 export function ProfileForm({
   editing,
@@ -41,12 +49,18 @@ export function ProfileForm({
   formFeedback,
   handleDisplayNameChange,
   onSubmit,
+  reset,
 }) {
   return (
     <Form onSubmit={onSubmit}>
       <ButtonGroup>
         <Title text="Profile" />
-        {editing && <Button text="Update" type="submit" />}
+        {editing && (
+          <FormControls>
+            <Button onClick={reset} style="muted" text="Cancel" />
+            <Button text="Update" type="submit" />
+          </FormControls>
+        )}
       </ButtonGroup>
       <FormGroup
         label={true}
