@@ -12,6 +12,7 @@ const signUpSuccessText =
   'Check your email. Email verification needed to complete your sign up.'
 
 export function App() {
+  const [loadingAuth, setLoadingAuth] = useState(true)
   const [user, setUser] = useState(null)
   const [theme, effectiveTheme, setTheme] = useDarkMode()
 
@@ -54,6 +55,7 @@ export function App() {
     const session = await retrieveSession()
     const currentUser = await retrieveUser(session)
     setUser(currentUser)
+    setLoadingAuth(false)
 
     // Set callback for auth events
     supabase.auth.onAuthStateChange(async (e, session) => {
@@ -89,16 +91,18 @@ export function App() {
   }
 
   return (
-    <AuthContext.Provider value={{ loginWithPassword, logout, signUp, user }}>
-      <DarkModeContext.Provider value={{ theme, effectiveTheme, setTheme }}>
-        <ThemeProvider theme={themes[effectiveTheme]}>
-          <div className="app">
-            <GlobalStyle />
-            <Nav />
-            <Outlet />
-          </div>
-        </ThemeProvider>
-      </DarkModeContext.Provider>
-    </AuthContext.Provider>
+    !loadingAuth && (
+      <AuthContext.Provider value={{ loginWithPassword, logout, signUp, user }}>
+        <DarkModeContext.Provider value={{ theme, effectiveTheme, setTheme }}>
+          <ThemeProvider theme={themes[effectiveTheme]}>
+            <div className="app">
+              <GlobalStyle />
+              <Nav />
+              <Outlet />
+            </div>
+          </ThemeProvider>
+        </DarkModeContext.Provider>
+      </AuthContext.Provider>
+    )
   )
 }
