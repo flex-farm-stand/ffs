@@ -27,7 +27,7 @@ seller_id uuid not null references profiles (id) on delete cascade,
 name varchar(32),
 price decimal,
 available bool,
-date_added timestamp,
+date_created timestamptz default now(),
 
 primary key (id)
 );
@@ -75,7 +75,8 @@ create policy "Buyers and sellers can update their own products."
   on orders for update
   using ( auth.uid() = buyer_id or auth.uid() = seller_id );
 
--- === TRIGGERS ===
+-- === FUNCTIONS ===
+-- *** handle_new_user ***
 -- inserts a row into public.profiles
 create function public.handle_new_user()
 returns trigger
@@ -89,7 +90,8 @@ begin
 end;
 $$;
 
--- trigger the function every time a user is created
+-- === TRIGGERS ===
+-- *** on_auth_user_created ***
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
