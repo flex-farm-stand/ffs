@@ -9,10 +9,16 @@ const supabaseServiceKey = env.SUPABASE_SERVICE_KEY
 
 async function getAllProfiles() {
   const supabase = createClient(supabaseUrl, supabaseAnonKey)
+  const data = await supabase.from('profiles').select()
+  console.log(data)
+}
+
+async function getOneProfile() {
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
   const data = await supabase
     .from('profiles')
     .select()
-    .eq('id', '46dab3ce-4a1e-44d2-95c7-45af71314b44')
+    .eq('id', 'ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a')
   console.log(data)
 }
 
@@ -36,6 +42,6 @@ async function getAllUsers() {
   console.log(users)
 }
 
-getAllUsers()
+getOneProfile()
 // getSession()
 // getAllProfiles()
