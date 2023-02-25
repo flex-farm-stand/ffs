@@ -3,8 +3,7 @@ import styled from 'styled-components'
 function VanillaFormGroup({
   autoFocus = false,
   className,
-  label = false,
-  labelText = 'Label text',
+  label = '',
   onChange,
   placeholder = '',
   type = 'text',
@@ -12,7 +11,7 @@ function VanillaFormGroup({
 }) {
   return (
     <div className={className}>
-      {label && <label>{labelText}</label>}
+      {label && <label>{label}</label>}
       <input
         autoFocus={autoFocus}
         onChange={onChange}

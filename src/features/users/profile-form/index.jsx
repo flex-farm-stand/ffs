@@ -3,23 +3,17 @@ import styled from 'styled-components'
 import {
   Button,
   ButtonGroup,
-  Form as OriginalForm,
+  Form,
   FormFeedback,
   FormGroup,
   Title,
 } from '@/features/ui'
 
-const Form = styled(OriginalForm)`
+const StyledForm = styled(Form)`
   & {
-    border: none;
     margin: 0 auto;
     max-width: 400px;
-  }
-  label {
-    display: inline-block;
-    margin-right: 15px;
-    text-align: left;
-    width: 20%;
+    padding: 2rem;
   }
   /*
     Math for input width
@@ -34,6 +28,7 @@ const Form = styled(OriginalForm)`
     width: calc(80% - 15px - 4px - 0.8rem);
   }
 `
+
 const FormControls = styled.div`
   button {
     font-size: 0.8rem;
@@ -52,7 +47,7 @@ export function ProfileForm({
   reset,
 }) {
   return (
-    <Form onSubmit={onSubmit}>
+    <StyledForm onSubmit={onSubmit}>
       <ButtonGroup>
         <Title text="Profile" />
         {editing && (
@@ -63,14 +58,13 @@ export function ProfileForm({
         )}
       </ButtonGroup>
       <FormGroup
-        label={true}
-        labelText="Name:"
+        label="Name:"
         placeholder="Enter publicly displayed name"
         type="text"
         value={name}
         onChange={handleDisplayNameChange}
       />
       <FormFeedback feedback={formFeedback} />
-    </Form>
+    </StyledForm>
   )
 }

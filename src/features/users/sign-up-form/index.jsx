@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { ThemeContext } from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 
 import {
   Button,
@@ -11,6 +11,19 @@ import {
   LogoLink,
   Title,
 } from '@/features/ui'
+
+const StyledForm = styled(Form)`
+  & {
+    border: 1px solid ${({ theme }) => theme.form.border};
+    border-radius: 5px;
+    margin: 20% auto;
+    max-width: 300px;
+    padding: 2rem;
+  }
+  input {
+    width: calc(100% - 0.8rem);
+  }
+`
 
 export function SignUpForm({
   email,
@@ -23,7 +36,7 @@ export function SignUpForm({
   const themeContext = useContext(ThemeContext)
 
   return (
-    <Form onSubmit={onSubmit}>
+    <StyledForm onSubmit={onSubmit}>
       <LogoLink color={themeContext.form.title} displayText={true} />
       <Title text="Sign up" />
       <FormGroup
@@ -44,6 +57,6 @@ export function SignUpForm({
         <Button text="Create" type="submit" />
         <Link to="/login">Login instead</Link>
       </ButtonGroup>
-    </Form>
+    </StyledForm>
   )
 }
