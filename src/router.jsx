@@ -13,6 +13,14 @@ const elements = (
     <Route index={true} element={<pages.Home />} />
     <Route path="/about" element={<pages.About />} />
     <Route
+      path="/inventory"
+      element={
+        <RequireAuth>
+          <pages.Inventory />
+        </RequireAuth>
+      }
+    />
+    <Route
       path="/profile"
       element={
         <RequireAuth>

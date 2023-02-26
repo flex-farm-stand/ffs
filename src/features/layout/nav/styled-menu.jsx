@@ -5,6 +5,7 @@ import {
   MdOutlineLogin,
   MdOutlineLogout,
   MdOutlineNightlightRound,
+  MdSell,
 } from 'react-icons/md'
 
 import styled from 'styled-components'
@@ -28,6 +29,9 @@ const StyledMenuButton = styled(MenuButton)`
 function MenuItemAuth({ auth }) {
   return auth.user ? (
     <>
+      <Menu.Item Icon={MdSell} to="/inventory">
+        Inventory
+      </Menu.Item>
       <Menu.Item Icon={FaRegUser} to="/profile">
         Profile
       </Menu.Item>
