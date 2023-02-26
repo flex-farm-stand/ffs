@@ -30,6 +30,9 @@ const StyledForm = styled(Form)`
 `
 
 const FormControls = styled.div`
+  & {
+    display: flex;
+  }
   button {
     font-size: 0.8rem;
   }
