@@ -37,7 +37,7 @@ export const Items = styled(VanillaItems).attrs({ className: 'menu-items' })`
     padding: 0 5px;
   }
   li:hover {
-    background-color: ${({ theme }) => theme.menu.hoverBg};
+    background-color: ${({ theme }) => theme.menu.bgHover};
   }
   li:first-child {
     border-radius: 5px 5px 0 0;
@@ -45,5 +45,13 @@ export const Items = styled(VanillaItems).attrs({ className: 'menu-items' })`
   li:last-child {
     border-radius: 0 0 5px 5px;
     border-bottom: none;
+  }
+  li > button,
+  a {
+    color: ${({ theme }) => theme.menu.text};
+  }
+  li.selected {
+    background-color: ${({ theme }) => theme.menu.bgSelected};
+    font-weight: bold;
   }
 `

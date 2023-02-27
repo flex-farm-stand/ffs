@@ -30,9 +30,9 @@ export const themes = {
     },
     menu: {
       bg: '#ddd',
+      bgHover: '#bbb',
+      bgSelected: '#888',
       border: '#aaa',
-      hoverBg: '#bbb',
-      selectedBg: '#888',
       text: '#000',
     },
     table: {
@@ -72,9 +72,9 @@ export const themes = {
     },
     menu: {
       bg: '#333',
+      bgHover: '#444',
+      bgSelected: '#222',
       border: '#555',
-      hoverBg: '#444',
-      selectedBg: '#222',
       text: '#fff',
     },
     table: {
