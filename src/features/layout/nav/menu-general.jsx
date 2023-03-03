@@ -6,25 +6,23 @@ import styled from 'styled-components'
 import { Menu } from '@/features/ui'
 import { useAuth } from '@/features/users'
 
-let authLogout = null
-
 const optionsLoggedIn = [
   {
     displayName: 'Inventory',
     icon: MdSell,
-    onClick: null,
+    name: 'inventory',
     to: '/inventory',
   },
   {
     displayName: 'Profile',
     icon: FaRegUser,
-    onClick: null,
+    name: 'profile',
     to: '/profile',
   },
   {
     displayName: 'Logout',
     icon: MdOutlineLogout,
-    onClick: authLogout,
+    name: 'logout',
     to: null,
   },
 ]
@@ -34,14 +32,12 @@ const optionsLoggedOut = [
     displayName: 'Login',
     icon: MdOutlineLogin,
     name: 'login',
-    onClick: null,
     to: '/login',
   },
   {
     displayName: 'Sign up',
     icon: FaRegUser,
     name: 'sign-up',
-    onClick: null,
     to: '/signup',
   },
 ]
@@ -80,20 +76,19 @@ const StyledMenuItems = styled(Menu.Items)`
 
 export function MenuGeneral() {
   const auth = useAuth()
-  authLogout = auth.logout
   const options = auth.user ? optionsLoggedIn : optionsLoggedOut
 
   return (
     <Menu>
       <StyledMenuButton />
       <StyledMenuItems>
-        {options.map(({ displayName, icon, onClick, to }) => (
+        {options.map(({ displayName, icon, name, to }) => (
           <ItemGeneral
             displayName={displayName}
             icon={icon}
             key={displayName}
             name={name}
-            onClick={onClick}
+            onClick={name === 'logout' ? auth.logout : null}
             to={to}
           />
         ))}
