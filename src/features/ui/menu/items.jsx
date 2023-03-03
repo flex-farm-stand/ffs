@@ -33,8 +33,6 @@ export const Items = styled(VanillaItems).attrs({ className: 'menu-items' })`
     background-color: inherit;
     border-bottom: 1px solid ${({ theme }) => theme.menu.border};
     display: flex;
-    height: 2rem;
-    padding: 0 5px;
   }
   li:hover {
     background-color: ${({ theme }) => theme.menu.bgHover};
@@ -46,12 +44,18 @@ export const Items = styled(VanillaItems).attrs({ className: 'menu-items' })`
     border-radius: 0 0 5px 5px;
     border-bottom: none;
   }
-  li > button,
-  a {
+  li button,
+  li a {
     color: ${({ theme }) => theme.menu.text};
+    cursor: pointer;
+    padding: 7px 5px;
   }
   li.selected {
     background-color: ${({ theme }) => theme.menu.bgSelected};
-    font-weight: bold;
+  }
+  li.selected button,
+  li.selected a {
+    color: ${({ theme }) => theme.menu.textSelected};
+    cursor: unset;
   }
 `
