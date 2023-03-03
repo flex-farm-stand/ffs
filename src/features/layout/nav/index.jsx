@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 
 import { LogoLink } from '@/features/ui'
-import { StyledMenu } from './styled-menu'
+import { MenuGeneral } from './menu-general'
 
 const pagesWithoutNav = ['/login', '/signup']
 
@@ -37,7 +37,7 @@ export function Nav() {
     <NavRoot>
       <NavBody>
         <LogoLink color={themeContext.nav.text} displayText={true} />
-        <StyledMenu />
+        <MenuGeneral />
       </NavBody>
     </NavRoot>
   )

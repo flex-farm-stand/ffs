@@ -1,8 +1,9 @@
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
-function VanillaMenuItem({ className, children, Icon, onClick, to }) {
+function VanillaMenuItem({ active, className, children, icon, onClick, to }) {
   const location = useLocation()
+  const Icon = icon
 
   const innerElement = to ? (
     <Link to={to}>
@@ -18,7 +19,9 @@ function VanillaMenuItem({ className, children, Icon, onClick, to }) {
 
   return (
     <li
-      className={`${location.pathname === to && 'selected'} ${className}`}
+      className={`${
+        active || location.pathname === to ? 'selected' : ''
+      } ${className}`}
     >
       {innerElement}
     </li>
