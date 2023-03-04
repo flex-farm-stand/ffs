@@ -9,7 +9,7 @@ function VanillaButton({ children, className, onClick, type = 'button' }) {
 }
 
 export const Button = styled(VanillaButton).attrs((props) => ({
-  button: props.theme.button[props.style || 'reg'],
+  button: props.theme.button[props.style] || props.theme.button.regular,
 }))`
   & {
     background-color: ${(props) => props.button.bg};

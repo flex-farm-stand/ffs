@@ -5,13 +5,13 @@ export const themes = {
       text: '#000',
     },
     button: {
-      muted: {
+      regular: {
         bg: '#fff',
         border: 'solid 1px #aaa',
         hoverShadow: 'inset 0 0 0 2rem rgba(0, 0, 0, 0.10)',
         text: '#000',
       },
-      reg: {
+      primary: {
         bg: 'dodgerblue',
         border: 'none',
         hoverShadow: 'inset 0 0 0 2rem rgba(0, 0, 0, 0.15)',
@@ -48,13 +48,13 @@ export const themes = {
       text: '#ddd',
     },
     button: {
-      muted: {
+      regular: {
         bg: '#333',
         border: 'solid 1px #555',
         hoverShadow: 'inset 0 0 0 2rem rgba(255, 255, 255, 0.08)',
         text: '#fff',
       },
-      reg: {
+      primary: {
         bg: 'dodgerblue',
         border: 'none',
         hoverShadow: 'inset 0 0 0 2rem rgba(0, 0, 0, 0.15)',

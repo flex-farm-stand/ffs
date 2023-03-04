@@ -54,10 +54,10 @@ export function AddProductForm({
           <Title text="Add product" />
           {editing && (
             <FormControls>
-              <Button onClick={reset} style="muted">
-                Cancel
+              <Button onClick={reset}>Cancel</Button>
+              <Button style="primary" type="submit">
+                Add
               </Button>
-              <Button type="submit">Add</Button>
             </FormControls>
           )}
         </ButtonGroup>
