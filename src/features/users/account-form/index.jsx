@@ -2,10 +2,10 @@ import styled from 'styled-components'
 
 import {
   Button,
-  ButtonGroup,
   Form,
+  FlexBetween,
   FormFeedback,
-  FormGroup,
+  InputLabelPair,
   Title,
 } from '@/features/ui'
 
@@ -53,7 +53,7 @@ export function AccountForm({
 }) {
   return (
     <StyledForm onSubmit={onSubmit}>
-      <ButtonGroup>
+      <FlexBetween>
         <Title text="Account details" />
         {editing && (
           <FormControls>
@@ -63,8 +63,8 @@ export function AccountForm({
             </Button>
           </FormControls>
         )}
-      </ButtonGroup>
-      <FormGroup
+      </FlexBetween>
+      <InputLabelPair
         autoFocus={true}
         label="Email:"
         placeholder="Enter email"
@@ -72,7 +72,7 @@ export function AccountForm({
         value={email}
         onChange={handleEmailChange}
       />
-      <FormGroup
+      <InputLabelPair
         label="Password:"
         placeholder="Enter password"
         type="password"

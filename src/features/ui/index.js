@@ -1,5 +1,6 @@
 export { Button } from './button'
-export { ButtonGroup, Form, FormFeedback, FormGroup } from './form'
+export { FlexBetween, FlexBetweenAndReorder } from './container'
+export { ButtonLabelPair, Form, FormFeedback, InputLabelPair } from './form'
 export { Logo, LogoLink } from './logo'
 export { Menu } from './menu'
 export { Title } from './title'

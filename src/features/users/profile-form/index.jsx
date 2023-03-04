@@ -2,10 +2,10 @@ import styled from 'styled-components'
 
 import {
   Button,
-  ButtonGroup,
   Form,
+  FlexBetween,
   FormFeedback,
-  FormGroup,
+  InputLabelPair,
   Title,
 } from '@/features/ui'
 
@@ -51,7 +51,7 @@ export function ProfileForm({
 }) {
   return (
     <StyledForm onSubmit={onSubmit}>
-      <ButtonGroup>
+      <FlexBetween>
         <Title text="Profile" />
         {editing && (
           <FormControls>
@@ -61,8 +61,8 @@ export function ProfileForm({
             </Button>
           </FormControls>
         )}
-      </ButtonGroup>
-      <FormGroup
+      </FlexBetween>
+      <InputLabelPair
         label="Name:"
         placeholder="Enter publicly displayed name"
         type="text"

@@ -7,14 +7,15 @@ export const Form = styled.form`
     gap: 0.5rem;
     text-align: center;
   }
-  input {
+  .input-label-pair > input {
     background-color: ${({ theme }) => theme.form.bg};
     border-radius: 5px;
     border: 2px solid ${({ theme }) => theme.form.border};
     color: ${({ theme }) => theme.form.text};
     padding: 0.4rem;
   }
-  label {
+  .button-label-pair > label,
+  .input-label-pair > label {
     display: inline-block;
     margin-right: 15px;
     text-align: left;

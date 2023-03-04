@@ -4,10 +4,10 @@ import styled, { ThemeContext } from 'styled-components'
 
 import {
   Button,
-  ButtonGroup,
   Form,
+  FlexBetweenAndReorder,
   FormFeedback,
-  FormGroup,
+  InputLabelPair,
   LogoLink,
   Title,
 } from '@/features/ui'
@@ -39,26 +39,26 @@ export function LoginForm({
     <StyledForm onSubmit={onSubmit}>
       <LogoLink color={themeContext.form.title} displayText={true} />
       <Title text="Login" />
-      <FormGroup
+      <InputLabelPair
         autoFocus={true}
         placeholder="Enter email"
         type="email"
         value={email}
         onChange={handleEmailChange}
       />
-      <FormGroup
+      <InputLabelPair
         placeholder="Enter password"
         type="password"
         value={password}
         onChange={handlePasswordChange}
       />
       <FormFeedback feedback={formFeedback} />
-      <ButtonGroup>
+      <FlexBetweenAndReorder>
         <Button style="primary" type="submit">
           Login
         </Button>
         <Link to="/signup">Create account</Link>
-      </ButtonGroup>
+      </FlexBetweenAndReorder>
     </StyledForm>
   )
 }

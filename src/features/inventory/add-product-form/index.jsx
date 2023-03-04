@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Button, ButtonGroup, Form, FormGroup, Title } from '@/features/ui'
+import { Button, FlexBetween, Form, InputLabelPair, Title } from '@/features/ui'
 
 const Container = styled.div`
   margin: 2rem auto;
@@ -50,7 +50,7 @@ export function AddProductForm({
   return (
     <Container>
       <StyledForm onSubmit={onInsert}>
-        <ButtonGroup>
+        <FlexBetween>
           <Title text="Add product" />
           {editing && (
             <FormControls>
@@ -60,8 +60,8 @@ export function AddProductForm({
               </Button>
             </FormControls>
           )}
-        </ButtonGroup>
-        <FormGroup
+        </FlexBetween>
+        <InputLabelPair
           autoFocus={true}
           label="Name:"
           onChange={handleNameChange}
@@ -70,7 +70,7 @@ export function AddProductForm({
           type="text"
           value={name}
         />
-        <FormGroup
+        <InputLabelPair
           label="Price:"
           onChange={handlePriceChange}
           placeholder="Enter product price"
