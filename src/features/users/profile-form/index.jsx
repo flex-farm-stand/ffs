@@ -55,8 +55,10 @@ export function ProfileForm({
         <Title text="Profile" />
         {editing && (
           <FormControls>
-            <Button onClick={reset} style="muted" text="Cancel" />
-            <Button text="Update" type="submit" />
+            <Button onClick={reset} style="muted">
+              Cancel
+            </Button>
+            <Button type="submit">Update</Button>
           </FormControls>
         )}
       </ButtonGroup>

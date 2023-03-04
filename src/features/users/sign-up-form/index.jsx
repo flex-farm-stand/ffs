@@ -54,7 +54,7 @@ export function SignUpForm({
       />
       <FormFeedback feedback={formFeedback} />
       <ButtonGroup>
-        <Button text="Create" type="submit" />
+        <Button type="submit">Create</Button>
         <Link to="/login">Login instead</Link>
       </ButtonGroup>
     </StyledForm>

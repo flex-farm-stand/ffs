@@ -1,17 +1,15 @@
 import styled from 'styled-components'
 
-function VanillaButton({ className, Icon, onClick, text, type = 'button' }) {
+function VanillaButton({ children, className, onClick, type = 'button' }) {
   return (
     <button className={className} onClick={onClick} type={type}>
-      {Icon && <Icon />}
-      {text && text}
+      {children}
     </button>
   )
 }
 
 export const Button = styled(VanillaButton).attrs((props) => ({
-  button:
-    props.style === 'muted' ? props.theme.button.muted : props.theme.button.reg,
+  button: props.theme.button[props.style || 'reg'],
 }))`
   & {
     background-color: ${(props) => props.button.bg};

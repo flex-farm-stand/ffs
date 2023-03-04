@@ -57,8 +57,10 @@ export function AccountForm({
         <Title text="Account details" />
         {editing && (
           <FormControls>
-            <Button onClick={reset} style="muted" text="Cancel" />
-            <Button text="Update" type="submit" />
+            <Button onClick={reset} style="muted">
+              Cancel
+            </Button>
+            <Button type="submit">Update</Button>
           </FormControls>
         )}
       </ButtonGroup>
