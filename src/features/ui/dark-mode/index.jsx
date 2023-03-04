@@ -6,7 +6,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 const classNameDark = 'dark-theme'
 const classNameLight = 'light-theme'
 const darkThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
-const initialValueTheme = window.localStorage.getItem('dark-theme')
+const initialValueTheme = window.localStorage.getItem('dark-theme') || 'auto'
 const initialValueEffectiveTheme =
   initialValueTheme === 'light' || initialValueTheme === 'dark'
     ? initialValueTheme
