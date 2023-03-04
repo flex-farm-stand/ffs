@@ -10,8 +10,19 @@ drop function if exists public.handle_new_user;
 drop table if exists orders;
 drop table if exists products;
 drop table if exists profiles;
+drop policy if exists "Everyone can view jpg/png images in folder"
+on storage.objects;
+drop policy if exists "Users can insert jpg/png images into folder"
+on storage.objects;
 
 -- === TABLES ===
+-- *** Storage buckets ***
+insert into storage.buckets
+  (id, name)
+values
+  ('product_images', 'product_images')
+on conflict do nothing;
+
 -- *** Profiles ***
 create table profiles (
  id uuid not null references auth.users on delete cascade,
@@ -27,6 +38,7 @@ seller_id uuid not null references profiles (id) on delete cascade,
 name varchar(32),
 price decimal,
 available bool,
+image_filename varchar(32),
 date_added timestamptz default now(),
 
 primary key (id)
@@ -44,6 +56,19 @@ primary key (id)
 alter table public.orders enable row level security;
 
 -- === POLICIES ===
+-- *** Storage buckets ***
+create policy "Everyone can view jpg/png images in folder"
+on storage.objects for select
+to public using (
+  bucket_id = 'product_images' and
+  lower((storage.foldername(name))[1]) = 'public' and
+  storage."extension"(name) in ('jpg', 'jpeg', 'png') );
+create policy "Users can insert jpg/png images into folder"
+on storage.objects for insert
+to authenticated with check (
+  bucket_id = 'product_images' and
+  lower((storage.foldername(name))[1]) = 'public' and
+  storage."extension"(name) in ('jpg', 'jpeg', 'png') );
 -- *** Profiles ***
 create policy "Public profiles are viewable by everyone."
   on profiles for select

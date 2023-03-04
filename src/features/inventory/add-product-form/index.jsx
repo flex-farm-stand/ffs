@@ -1,8 +1,18 @@
 import styled from 'styled-components'
 
-import { Button, FlexBetween, Form, InputLabelPair, Title } from '@/features/ui'
+import {
+  Button,
+  ButtonLabelPair,
+  FlexBetween,
+  Form,
+  FormFeedback,
+  InputLabelPair,
+  Title,
+} from '@/features/ui'
 
 const Container = styled.div`
+  display: flex;
+  gap: 0.5rem;
   margin: 2rem auto;
   max-width: 600px;
 `
@@ -23,6 +33,19 @@ const StyledForm = styled(Form)`
   input {
     width: calc(80% - 15px - 4px - 0.8rem);
   }
+  /*
+    Math for button width
+    row = 100%
+    row = label + button
+    label = 20%
+    input = row - label - labelMarginRight
+    input = 100% - 20% - 15px
+    input = 80% - 15px
+  */
+  .button-label-pair button {
+    display: inline-block;
+    width: calc(80% - 15px);
+  }
 `
 
 const FormControls = styled.div`
@@ -37,15 +60,32 @@ const FormControls = styled.div`
   }
 `
 
+const HiddenFileInput = styled.input`
+  display: none;
+`
+
+const ImagePreview = styled.div`
+  img {
+    height: auto;
+    max-height: 150px;
+    max-width: 150px;
+    width: auto;
+  }
+`
+
 export function AddProductForm({
   editing,
+  feedback,
+  handleFileChange,
   handleNameChange,
   handlePriceChange,
+  imageUrl,
   inputRef,
   name,
   onInsert,
   price,
   reset,
+  uploading,
 }) {
   return (
     <Container>
@@ -77,7 +117,23 @@ export function AddProductForm({
           type="text"
           value={price}
         />
+        <ButtonLabelPair label="Image:">
+          <Button type="button">
+            <label htmlFor="productInput">
+              {uploading ? 'Uploading' : imageUrl ? 'Replace...' : 'Choose...'}
+            </label>
+          </Button>
+        </ButtonLabelPair>
+        <HiddenFileInput
+          accept=".jpg, .jpeg, .png"
+          disabled={uploading}
+          id="productInput"
+          onChange={handleFileChange}
+          type="file"
+        />
+        <FormFeedback feedback={feedback} />
       </StyledForm>
+      <ImagePreview>{imageUrl && <img src={imageUrl} />}</ImagePreview>
     </Container>
   )
 }
