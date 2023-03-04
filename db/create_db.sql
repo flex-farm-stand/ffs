@@ -1,9 +1,10 @@
 --
 -- create_db.sql
 --
--- This is meant to be run the Supabase SQL Editor tool
+-- This is meant to be run either
+--    - in the Supabase SQL Editor tool
+--    - via the psql command line tool (see the file: commands.sh)
 --
-
 -- CLEAN UP
 drop trigger if exists on_auth_user_created on auth.users;
 drop function if exists public.handle_new_user;
