@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
-import { Title } from '@/features/ui'
 import { LoginForm, useAuth } from '@/features/users'
 
 export function Login() {
   const auth = useAuth()
   const [email, setEmail] = useState('')
-  const [formFeedback, setFormFeedback] = useState(null)
+  const [formFeedback, setFormFeedback] = useState({ status: '', message: '' })
   const [password, setPassword] = useState('')
 
   function handleEmailChange(e) {
@@ -22,22 +21,16 @@ export function Login() {
     setFormFeedback(result)
   }
 
-  return (
-    <div>
-      <Title text="Login" />
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-      </ul>
-      <LoginForm
-        email={email}
-        formFeedback={formFeedback}
-        handleEmailChange={handleEmailChange}
-        handlePasswordChange={handlePasswordChange}
-        onSubmit={onSubmit}
-        password={password}
-      />
-    </div>
+  return auth.user ? (
+    <Navigate to="/profile" />
+  ) : (
+    <LoginForm
+      email={email}
+      formFeedback={formFeedback}
+      handleEmailChange={handleEmailChange}
+      handlePasswordChange={handlePasswordChange}
+      onSubmit={onSubmit}
+      password={password}
+    />
   )
 }

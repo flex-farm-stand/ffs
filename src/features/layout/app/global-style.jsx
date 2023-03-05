@@ -8,5 +8,9 @@ export const GlobalStyle = createGlobalStyle`
   }
   a {
     color: dodgerblue;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
   }
 `

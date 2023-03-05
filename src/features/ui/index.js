@@ -1,6 +1,6 @@
 export { Button } from './button'
-export { FormGroup } from './form-group'
-export { Logo } from './logo'
+export { ButtonGroup, Form, FormFeedback, FormGroup } from './form'
+export { Logo, LogoLink } from './logo'
 export { Menu } from './menu'
 export { Title } from './title'
 export { DarkModeContext, useDarkMode, useDarkModeContext } from './dark-mode'

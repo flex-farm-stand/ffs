@@ -1,7 +1,16 @@
-import { Navigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { ThemeContext } from 'styled-components'
 
-import { Button, FormGroup } from '@/features/ui/'
-import { useAuth } from '@/features/users'
+import {
+  Button,
+  ButtonGroup,
+  Form,
+  FormFeedback,
+  FormGroup,
+  LogoLink,
+  Title,
+} from '@/features/ui'
 
 export function LoginForm({
   email,
@@ -11,13 +20,14 @@ export function LoginForm({
   onSubmit,
   password,
 }) {
-  const auth = useAuth()
+  const themeContext = useContext(ThemeContext)
 
-  return auth.user ? (
-    <Navigate to="/profile" />
-  ) : (
-    <form onSubmit={onSubmit}>
+  return (
+    <Form onSubmit={onSubmit}>
+      <LogoLink color={themeContext.form.title} displayText={true} />
+      <Title text="Login" />
       <FormGroup
+        autoFocus={true}
         placeholder="Enter email"
         type="email"
         value={email}
@@ -29,8 +39,11 @@ export function LoginForm({
         value={password}
         onChange={handlePasswordChange}
       />
-      {formFeedback && <p>{formFeedback.message}</p>}
-      <Button text="Login" type="submit" />
-    </form>
+      <FormFeedback feedback={formFeedback} />
+      <ButtonGroup>
+        <Button text="Login" type="submit" />
+        <Link to="/signup">Create account</Link>
+      </ButtonGroup>
+    </Form>
   )
 }

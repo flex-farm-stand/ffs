@@ -1,23 +1,33 @@
-import { Navigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { ThemeContext } from 'styled-components'
 
-import { Button, FormGroup } from '@/features/ui/'
-import { useAuth } from '@/features/users'
+import {
+  Button,
+  ButtonGroup,
+  Form,
+  FormFeedback,
+  FormGroup,
+  LogoLink,
+  Title,
+} from '@/features/ui'
 
 export function SignUpForm({
   email,
   formFeedback,
   handleEmailChange,
   handlePasswordChange,
-  handleSubmit,
+  onSubmit,
   password,
 }) {
-  const auth = useAuth()
+  const themeContext = useContext(ThemeContext)
 
-  return auth.user ? (
-    <Navigate to="/profile" />
-  ) : (
-    <form onSubmit={handleSubmit}>
+  return (
+    <Form onSubmit={onSubmit}>
+      <LogoLink color={themeContext.form.title} displayText={true} />
+      <Title text="Sign up" />
       <FormGroup
+        autoFocus={true}
         placeholder="Enter email"
         type="email"
         value={email}
@@ -29,8 +39,11 @@ export function SignUpForm({
         value={password}
         onChange={handlePasswordChange}
       />
-      {formFeedback && <p>{formFeedback.message}</p>}
-      <Button text="Sign up" type="submit" />
-    </form>
+      <FormFeedback feedback={formFeedback} />
+      <ButtonGroup>
+        <Button text="Create" type="submit" />
+        <Link to="/login">Login instead</Link>
+      </ButtonGroup>
+    </Form>
   )
 }
