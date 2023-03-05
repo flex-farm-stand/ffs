@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
+import { ThemeProvider } from 'styled-components'
 
-import { Header } from '@/features/ui'
+import { Nav } from '@/features/layout'
+import { DarkModeContext, useDarkMode } from '@/features/ui'
 import { AuthContext, supabase } from '@/features/users'
-import './app.css'
+import { GlobalStyle } from './global-style'
+import { themes } from './themes'
 
 const signUpSuccessText =
   'Check your email. Email verification needed to complete your sign up.'
 
 export function App() {
   const [user, setUser] = useState(null)
+  const [theme, effectiveTheme, setTheme] = useDarkMode()
 
   useEffect(() => {
     initializeAuthProvider()
@@ -63,10 +67,15 @@ export function App() {
 
   return (
     <AuthContext.Provider value={{ loginWithPassword, logout, signUp, user }}>
-      <div className="app">
-        <Header />
-        <Outlet />
-      </div>
+      <DarkModeContext.Provider value={{ theme, effectiveTheme, setTheme }}>
+        <ThemeProvider theme={themes[effectiveTheme]}>
+          <div className="app">
+            <GlobalStyle />
+            <Nav />
+            <Outlet />
+          </div>
+        </ThemeProvider>
+      </DarkModeContext.Provider>
     </AuthContext.Provider>
   )
 }
