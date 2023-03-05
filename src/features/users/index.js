@@ -1,4 +1,5 @@
 export { AuthContext, useAuth } from './auth-context'
+export { ProfileForm } from './profile-form'
 export { LoginForm } from './login-form'
 export { RequireAuth } from './require-auth'
 export { SignUpForm } from './sign-up-form'

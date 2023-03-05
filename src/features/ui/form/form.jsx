@@ -20,8 +20,4 @@ export const Form = styled.form`
     padding: 0.4rem;
     width: calc(100% - 0.8rem);
   }
-  input:focus,
-  button:focus {
-    outline: 2px solid powderblue;
-  }
 `
