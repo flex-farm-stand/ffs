@@ -1,7 +1,6 @@
 export { AccountForm } from './account-form'
-export { AuthContext, useAuth } from './auth-context'
+export { useAuth, AuthContext, AuthProvider } from './auth'
 export { ProfileForm } from './profile-form'
 export { LoginForm } from './login-form'
 export { RequireAuth } from './require-auth'
 export { SignUpForm } from './sign-up-form'
-export { supabase } from './supabase-client'

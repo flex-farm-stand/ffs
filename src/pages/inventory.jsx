@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { AddProductForm, InventoryList } from '@/features/inventory'
-import { supabase, useAuth } from '@/features/users'
+import { useSupabaseClient } from '@/features/supabase'
+import { useAuth } from '@/features/users'
 
 const initialFeedback = { status: '', message: '' }
 const initialName = ''
@@ -25,6 +26,7 @@ export function Inventory() {
   const [loading, setLoading] = useState(true)
   const [name, setName] = useState(initialName)
   const [price, setPrice] = useState(initialPrice)
+  const supabase = useSupabaseClient()
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
