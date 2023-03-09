@@ -1,5 +1,13 @@
 import styled from 'styled-components'
 
+export const CenterAndLimitWidth = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 2rem auto;
+  max-width: 600px;
+`
+
 export const FlexBetweenAndReorder = styled.div.attrs({
   className: 'flex-between-and-reorder',
 })`

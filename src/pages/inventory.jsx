@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AddProductForm, InventoryList } from '@/features/inventory'
 import { useSupabaseClient } from '@/features/supabase'
 import { useAuth } from '@/features/users'
+import { CenterAndLimitWidth } from '@/features/ui'
 
 const initialFeedback = { status: '', message: '' }
 const initialName = ''
@@ -133,7 +134,7 @@ export function Inventory() {
 
   return (
     !loading && (
-      <>
+      <CenterAndLimitWidth>
         <AddProductForm
           editing={editing}
           feedback={feedback}
@@ -153,7 +154,7 @@ export function Inventory() {
           handleCheckboxChange={handleCheckboxChange}
           inventory={inventory}
         />
-      </>
+      </CenterAndLimitWidth>
     )
   )
 }

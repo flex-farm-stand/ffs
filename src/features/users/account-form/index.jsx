@@ -11,9 +11,7 @@ import {
 
 const StyledForm = styled(Form)`
   & {
-    margin: 0 auto;
     max-width: 400px;
-    padding: 2rem;
   }
   /*
     Math for input width

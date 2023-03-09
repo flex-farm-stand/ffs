@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
-import { AccountForm, ProfileForm, useAuth } from '@/features/users'
 import { useSupabaseClient } from '@/features/supabase'
+import { CenterAndLimitWidth } from '@/features/ui'
+import { AccountForm, ProfileForm, useAuth } from '@/features/users'
 
 const successEmailChange =
   'Check your email - both the old and new email addresses. Two email ' +
@@ -79,7 +80,7 @@ export function Profile() {
   }
 
   return (
-    <>
+    <CenterAndLimitWidth>
       <AccountForm
         editing={editingAccount}
         email={email}
@@ -98,6 +99,6 @@ export function Profile() {
         onSubmit={onSubmitProfile}
         reset={resetProfile}
       />
-    </>
+    </CenterAndLimitWidth>
   )
 }

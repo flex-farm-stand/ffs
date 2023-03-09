@@ -10,13 +10,6 @@ import {
   Title,
 } from '@/features/ui'
 
-const Container = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  margin: 2rem auto;
-  max-width: 600px;
-`
-
 const StyledForm = styled(Form)`
   & {
     max-width: 300px;
@@ -88,7 +81,7 @@ export function AddProductForm({
   uploading,
 }) {
   return (
-    <Container>
+    <div>
       <StyledForm onSubmit={onInsert}>
         <FlexBetween>
           <Title text="Add product" />
@@ -134,6 +127,6 @@ export function AddProductForm({
         <FormFeedback feedback={feedback} />
       </StyledForm>
       <ImagePreview>{imageUrl && <img src={imageUrl} />}</ImagePreview>
-    </Container>
+    </div>
   )
 }

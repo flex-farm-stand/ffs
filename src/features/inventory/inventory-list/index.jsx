@@ -4,14 +4,6 @@ import { Title } from '@/features/ui'
 
 const emptyInventoryText = 'There are no items in your inventory at the moment.'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 2rem auto;
-  max-width: 600px;
-  overflow-x: auto;
-`
-
 function Greeting({ count }) {
   return (
     <p>
@@ -79,7 +71,7 @@ export function InventoryList({ attributes, handleCheckboxChange, inventory }) {
   const thead = attributes.map(ths)
 
   return (
-    <Container>
+    <div>
       <Title text="Inventory" />
       <Greeting count={!inventory ? 0 : inventory.length} />
       <Table>
@@ -88,6 +80,6 @@ export function InventoryList({ attributes, handleCheckboxChange, inventory }) {
         </thead>
         <tbody>{tbody}</tbody>
       </Table>
-    </Container>
+    </div>
   )
 }
