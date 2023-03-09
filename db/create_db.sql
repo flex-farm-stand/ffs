@@ -37,10 +37,10 @@ create table profiles (
 alter table public.profiles enable row level security;
 -- *** Products ***
 create table products (
-id bigint generated always as identity,
+id uuid default uuid_generate_v4(),
 seller_id uuid not null references profiles (id) on delete cascade,
-name varchar(32),
-price decimal,
+name varchar(32) not null,
+price decimal not null,
 available bool,
 image_filename varchar(32),
 date_added timestamptz default now(),
@@ -50,8 +50,8 @@ primary key (id)
 alter table products enable row level security;
 -- *** Orders ***
 create table orders (
-id bigint generated always as identity,
-product_id bigint not null references products (id) on delete restrict,
+id uuid default uuid_generate_v4(),
+product_id uuid not null references products (id) on delete restrict,
 buyer_id uuid not null references profiles (id) on delete restrict,
 seller_id uuid not null references profiles (id) on delete restrict,
 
