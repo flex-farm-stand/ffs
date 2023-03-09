@@ -9,6 +9,7 @@
 drop trigger if exists on_auth_user_created on auth.users;
 drop function if exists public.handle_new_user;
 delete from storage.objects where bucket_id = 'product_images';
+delete from storage.buckets;
 delete from auth.users;
 drop table if exists orders;
 drop table if exists products;
@@ -21,9 +22,9 @@ on storage.objects;
 -- === TABLES ===
 -- *** Storage buckets ***
 insert into storage.buckets
-  (id, name)
+  (id, name, public)
 values
-  ('product_images', 'product_images')
+  ('product_images', 'product_images', true)
 on conflict do nothing;
 
 -- *** Profiles ***
@@ -64,13 +65,11 @@ create policy "Everyone can view jpg/png images in folder"
 on storage.objects for select
 to public using (
   bucket_id = 'product_images' and
-  lower((storage.foldername(name))[1]) = 'public' and
   storage."extension"(name) in ('jpg', 'jpeg', 'png') );
 create policy "Users can insert jpg/png images into folder"
 on storage.objects for insert
 to authenticated with check (
   bucket_id = 'product_images' and
-  lower((storage.foldername(name))[1]) = 'public' and
   storage."extension"(name) in ('jpg', 'jpeg', 'png') );
 -- *** Profiles ***
 create policy "Public profiles are viewable by everyone."
