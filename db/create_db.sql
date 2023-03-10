@@ -19,6 +19,9 @@ on storage.objects;
 drop policy if exists "Users can insert jpg/png images into folder"
 on storage.objects;
 
+-- Enable gql infection (display_name -> displayName)
+comment on schema public is '@graphql({"inflect_names": true})';
+
 -- === TABLES ===
 -- *** Storage buckets ***
 insert into storage.buckets
