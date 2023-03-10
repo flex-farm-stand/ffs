@@ -20,6 +20,7 @@ const elements = (
         </RequireAuth>
       }
     />
+    <Route path="/product/:id" element={<pages.Product />} />
     <Route
       path="/profile"
       element={

@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Title } from '@/features/ui'
+import { capitalize } from '@/features/utils'
 
 const emptyInventoryText = 'There are no items in your inventory at the moment.'
 
@@ -41,9 +43,6 @@ const Table = styled.table`
 //  - table heading attributes
 //  - table row values
 //  - table rows
-function capitalize(s) {
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
 const ths = ({ name, display, Component }) => (
   <th key={name}>{display || <Component />}</th>
 )
@@ -54,6 +53,10 @@ export function InventoryList({ attributes, handleCheckboxChange, inventory }) {
       {attributes.map(({ name }) =>
         name === 'price' ? (
           <td key={name}>{'$' + item[name].toFixed(2)}</td>
+        ) : name === 'name' ? (
+          <td key={name}>
+            <Link to={item.url}>{capitalize(item[name])}</Link>
+          </td>
         ) : name === 'checked' ? (
           <td key={name}>
             <input

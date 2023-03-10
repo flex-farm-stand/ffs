@@ -36,7 +36,7 @@ export function Inventory() {
   async function getInventory() {
     const { data, error } = await supabase
       .from('products')
-      .select('name, price, date_added')
+      .select('id, name, price, date_added')
       .eq('seller_id', auth.user.id)
 
     if (error) {
@@ -49,6 +49,7 @@ export function Inventory() {
         name: d.name,
         price: d.price,
         dateAdded: new Date(d.date_added).toDateString(),
+        url: `/product/${d.id}`,
       }))
     )
     setLoading(false)
