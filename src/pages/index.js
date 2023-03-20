@@ -1,6 +1,7 @@
 export { About } from './about'
 export { Error } from './error'
-export { Profile } from './profile'
 export { Home } from './home'
+export { Inventory } from './inventory'
 export { Login } from './login'
+export { Profile } from './profile'
 export { SignUp } from './sign-up'

@@ -3,23 +3,17 @@ import styled from 'styled-components'
 import {
   Button,
   ButtonGroup,
-  Form as OriginalForm,
+  Form,
   FormFeedback,
   FormGroup,
   Title,
 } from '@/features/ui'
 
-const Form = styled(OriginalForm)`
+const StyledForm = styled(Form)`
   & {
-    border: none;
     margin: 0 auto;
     max-width: 400px;
-  }
-  label {
-    display: inline-block;
-    margin-right: 15px;
-    text-align: left;
-    width: 20%;
+    padding: 2rem;
   }
   /*
     Math for input width
@@ -36,6 +30,9 @@ const Form = styled(OriginalForm)`
 `
 
 const FormControls = styled.div`
+  & {
+    display: flex;
+  }
   button {
     font-size: 0.8rem;
   }
@@ -55,7 +52,7 @@ export function AccountForm({
   reset,
 }) {
   return (
-    <Form onSubmit={onSubmit}>
+    <StyledForm onSubmit={onSubmit}>
       <ButtonGroup>
         <Title text="Account details" />
         {editing && (
@@ -67,22 +64,20 @@ export function AccountForm({
       </ButtonGroup>
       <FormGroup
         autoFocus={true}
-        label={true}
-        labelText="Email:"
+        label="Email:"
         placeholder="Enter email"
         type="email"
         value={email}
         onChange={handleEmailChange}
       />
       <FormGroup
-        label={true}
-        labelText="Password:"
+        label="Password:"
         placeholder="Enter password"
         type="password"
         value={password}
         onChange={handlePasswordChange}
       />
       <FormFeedback feedback={formFeedback} />
-    </Form>
+    </StyledForm>
   )
 }

@@ -20,7 +20,7 @@ export const themes = {
     },
     form: {
       bg: '#fff',
-      border: '#A3A3A3',
+      border: '#a3a3a3',
       text: '#222',
       title: '#000',
     },
@@ -34,6 +34,11 @@ export const themes = {
       hoverBg: '#bbb',
       selectedBg: '#888',
       text: '#000',
+    },
+    table: {
+      bg: '#ececec',
+      bgHover: '#ccc',
+      border: '#a3a3a3',
     },
   },
   dark: {
@@ -58,7 +63,7 @@ export const themes = {
     form: {
       bg: '#404040',
       border: '#737373',
-      text: '#D1D5DB',
+      text: '#d1d5db',
       title: '#fff',
     },
     nav: {
@@ -71,6 +76,11 @@ export const themes = {
       hoverBg: '#444',
       selectedBg: '#222',
       text: '#fff',
+    },
+    table: {
+      bg: '#151515',
+      bgHover: '#333',
+      border: '#737373',
     },
   },
 }

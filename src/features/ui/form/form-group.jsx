@@ -1,28 +1,34 @@
+import { forwardRef } from 'react'
+
 import styled from 'styled-components'
 
-function VanillaFormGroup({
-  autoFocus = false,
-  className,
-  label = false,
-  labelText = 'Label text',
-  onChange,
-  placeholder = '',
-  type = 'text',
-  value,
-}) {
-  return (
+const VanillaFormGroup = forwardRef(
+  (
+    {
+      autoFocus = false,
+      className,
+      label = '',
+      onChange,
+      placeholder = '',
+      type = 'text',
+      value,
+    },
+    ref
+  ) => (
     <div className={className}>
-      {label && <label>{labelText}</label>}
+      {label && <label>{label}</label>}
       <input
         autoFocus={autoFocus}
         onChange={onChange}
         placeholder={placeholder}
+        ref={ref}
         type={type}
         value={value}
       />
     </div>
   )
-}
+)
+VanillaFormGroup.displayName = 'VanillaFormGroup'
 
 export const FormGroup = styled(VanillaFormGroup).attrs({
   className: 'form-group',

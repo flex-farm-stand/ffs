@@ -22,12 +22,6 @@ async function getOneProfile() {
   console.log(data)
 }
 
-async function getSession() {
-  const supabase = createClient(supabaseUrl, supabaseAnonKey)
-  const data = await supabase.auth.getSession()
-  console.log(data)
-}
-
 // Demonstrates how to use the Auth Admin, which requires the service key
 async function getAllUsers() {
   const supabase = createClient(supabaseUrl, supabaseServiceKey, {
@@ -43,5 +37,5 @@ async function getAllUsers() {
 }
 
 getOneProfile()
-// getSession()
 // getAllProfiles()
+// getAllUsers()
