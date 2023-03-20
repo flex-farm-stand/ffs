@@ -1,12 +1,9 @@
 import { forwardRef } from 'react'
 
-import styled from 'styled-components'
-
-const VanillaFormGroup = forwardRef(
+export const InputLabelPair = forwardRef(
   (
     {
       autoFocus = false,
-      className,
       label = '',
       onChange,
       placeholder = '',
@@ -15,7 +12,7 @@ const VanillaFormGroup = forwardRef(
     },
     ref
   ) => (
-    <div className={className}>
+    <div className="input-label-pair">
       {label && <label>{label}</label>}
       <input
         autoFocus={autoFocus}
@@ -28,8 +25,4 @@ const VanillaFormGroup = forwardRef(
     </div>
   )
 )
-VanillaFormGroup.displayName = 'VanillaFormGroup'
-
-export const FormGroup = styled(VanillaFormGroup).attrs({
-  className: 'form-group',
-})``
+InputLabelPair.displayName = 'InputLabePair'

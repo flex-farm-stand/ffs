@@ -1,4 +1,4 @@
-export { ButtonGroup } from './button-group'
+export { ButtonLabelPair } from './button-label-pair'
 export { Form } from './form'
 export { FormFeedback } from './form-feedback'
-export { FormGroup } from './form-group'
+export { InputLabelPair } from './input-label-pair'

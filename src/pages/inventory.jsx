@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AddProductForm, InventoryList } from '@/features/inventory'
 import { supabase, useAuth } from '@/features/users'
 
+const initialFeedback = { status: '', message: '' }
 const initialName = ''
 const initialPrice = ''
 const attributes = [
@@ -16,11 +17,15 @@ const attributes = [
 export function Inventory() {
   const auth = useAuth()
   const [editing, setEditing] = useState(false)
+  const [feedback, setFeedback] = useState({ status: '', message: '' })
   const inputRef = useRef(null)
+  const [imageFileName, setImageFileName] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
   const [inventory, setInventory] = useState([])
   const [loading, setLoading] = useState(true)
   const [name, setName] = useState(initialName)
   const [price, setPrice] = useState(initialPrice)
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     getInventory()
@@ -52,6 +57,45 @@ export function Inventory() {
       )
     )
   }
+  async function handleFileChange(e) {
+    try {
+      setUploading(true)
+      setFeedback(initialFeedback)
+
+      if (!e.target.files || e.target.files.length === 0) {
+        throw new Error('No image selected for upload')
+      }
+      const file = e.target.files[0]
+      const fileExt = file.name.split('.').pop()
+      // Assign random sequence of fractional digits of [0 < number < 1)
+      const fileName = `public/${Math.random().toString().slice(2)}.${fileExt}`
+
+      // Query #1 - upload image
+      const uploadResponse = await supabase.storage
+        .from('product_images')
+        .upload(fileName, file)
+
+      if (uploadResponse.error) {
+        throw uploadResponse.error
+      }
+      setImageFileName(fileName)
+
+      // Query #2 - obtain URL to image that only works for the next 60 seconds
+      const urlResponse = await supabase.storage
+        .from('product_images')
+        .createSignedUrls([fileName], 60)
+
+      if (urlResponse.error) {
+        throw urlResponse.error
+      }
+      setImageUrl(urlResponse.data[0].signedUrl)
+      setEditing(true)
+    } catch (error) {
+      setFeedback({ status: 'error', message: error.message })
+    } finally {
+      setUploading(false)
+    }
+  }
   function handlePriceChange(e) {
     setPrice(e.target.value)
     setEditing(true)
@@ -67,6 +111,7 @@ export function Inventory() {
       name,
       price,
       available: true,
+      image_filename: imageFileName,
     })
 
     if (data.error) {
@@ -78,6 +123,8 @@ export function Inventory() {
   function resetForm() {
     setName(initialName)
     setPrice(initialPrice)
+    setImageUrl('')
+    setImageFileName('')
     setEditing(false)
     inputRef.current.focus()
   }
@@ -87,13 +134,17 @@ export function Inventory() {
       <>
         <AddProductForm
           editing={editing}
+          feedback={feedback}
+          handleFileChange={handleFileChange}
           handleNameChange={handleNameChange}
           handlePriceChange={handlePriceChange}
+          imageUrl={imageUrl}
           inputRef={inputRef}
           name={name}
           onInsert={onInsert}
           price={price}
           reset={resetForm}
+          uploading={uploading}
         />
         <InventoryList
           attributes={attributes}
