@@ -13,16 +13,19 @@ function VanillaButton({
   )
 }
 
-export const Button = styled(VanillaButton)`
+export const Button = styled(VanillaButton).attrs((props) => ({
+  button:
+    props.style === 'muted' ? props.theme.button.muted : props.theme.button.reg,
+}))`
   & {
-    background-color: dodgerblue;
-    border: none;
+    background-color: ${(props) => props.button.bg};
+    border: ${(props) => props.button.border};
     border-radius: 5px;
-    color: #fff;
+    color: ${(props) => props.button.text};
     cursor: pointer;
     padding: 0.5rem;
   }
   &:hover {
-    box-shadow: inset 0 0 0 2rem rgba(0, 0, 0, 0.15);
+    box-shadow: ${(props) => props.button.hoverShadow};
   }
 `

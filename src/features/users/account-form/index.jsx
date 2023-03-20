@@ -34,6 +34,7 @@ const Form = styled(OriginalForm)`
     width: calc(80% - 15px - 4px - 0.8rem);
   }
 `
+
 const FormControls = styled.div`
   button {
     font-size: 0.8rem;
@@ -43,18 +44,20 @@ const FormControls = styled.div`
   }
 `
 
-export function ProfileForm({
+export function AccountForm({
   editing,
-  name,
+  email,
   formFeedback,
-  handleDisplayNameChange,
+  handleEmailChange,
+  handlePasswordChange,
   onSubmit,
+  password,
   reset,
 }) {
   return (
     <Form onSubmit={onSubmit}>
       <ButtonGroup>
-        <Title text="Profile" />
+        <Title text="Account details" />
         {editing && (
           <FormControls>
             <Button onClick={reset} style="muted" text="Cancel" />
@@ -63,12 +66,21 @@ export function ProfileForm({
         )}
       </ButtonGroup>
       <FormGroup
+        autoFocus={true}
         label={true}
-        labelText="Name:"
-        placeholder="Enter publicly displayed name"
-        type="text"
-        value={name}
-        onChange={handleDisplayNameChange}
+        labelText="Email:"
+        placeholder="Enter email"
+        type="email"
+        value={email}
+        onChange={handleEmailChange}
+      />
+      <FormGroup
+        label={true}
+        labelText="Password:"
+        placeholder="Enter password"
+        type="password"
+        value={password}
+        onChange={handlePasswordChange}
       />
       <FormFeedback feedback={formFeedback} />
     </Form>

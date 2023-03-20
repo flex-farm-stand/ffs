@@ -1,3 +1,4 @@
+export { AccountForm } from './account-form'
 export { AuthContext, useAuth } from './auth-context'
 export { ProfileForm } from './profile-form'
 export { LoginForm } from './login-form'
