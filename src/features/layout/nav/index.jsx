@@ -16,6 +16,7 @@ const NavBody = styled.div.attrs({ className: 'nav-body' })`
   justify-content: space-between;
   margin: 0 auto;
   max-width: 600px;
+  padding: 0 5px;
 `
 
 const NavBodyRight = styled.div.attrs({ className: 'nav-body-right' })`

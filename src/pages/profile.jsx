@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
-import { AccountForm, ProfileForm, supabase, useAuth } from '@/features/users'
+import { useSupabaseClient } from '@/features/supabase'
+import { CenterAndLimitWidth } from '@/features/ui'
+import { AccountForm, ProfileForm, useAuth } from '@/features/users'
 
 const successEmailChange =
   'Check your email - both the old and new email addresses. Two email ' +
@@ -18,6 +20,7 @@ export function Profile() {
   const [feedbackProfile, setFeedbackProfile] = useState(initialFeedback)
   const [name, setName] = useState(auth.user.displayName || '')
   const [password, setPassword] = useState('')
+  const supabase = useSupabaseClient()
 
   function handleDisplayNameChange(e) {
     setName(e.target.value)
@@ -77,7 +80,7 @@ export function Profile() {
   }
 
   return (
-    <>
+    <CenterAndLimitWidth>
       <AccountForm
         editing={editingAccount}
         email={email}
@@ -96,6 +99,6 @@ export function Profile() {
         onSubmit={onSubmitProfile}
         reset={resetProfile}
       />
-    </>
+    </CenterAndLimitWidth>
   )
 }

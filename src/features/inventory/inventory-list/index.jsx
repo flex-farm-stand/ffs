@@ -1,16 +1,10 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Title } from '@/features/ui'
+import { capitalize } from '@/features/utils'
 
 const emptyInventoryText = 'There are no items in your inventory at the moment.'
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 2rem auto;
-  max-width: 600px;
-  overflow-x: auto;
-`
 
 function Greeting({ count }) {
   return (
@@ -49,9 +43,6 @@ const Table = styled.table`
 //  - table heading attributes
 //  - table row values
 //  - table rows
-function capitalize(s) {
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
 const ths = ({ name, display, Component }) => (
   <th key={name}>{display || <Component />}</th>
 )
@@ -62,6 +53,10 @@ export function InventoryList({ attributes, handleCheckboxChange, inventory }) {
       {attributes.map(({ name }) =>
         name === 'price' ? (
           <td key={name}>{'$' + item[name].toFixed(2)}</td>
+        ) : name === 'name' ? (
+          <td key={name}>
+            <Link to={item.url}>{capitalize(item[name])}</Link>
+          </td>
         ) : name === 'checked' ? (
           <td key={name}>
             <input
@@ -79,7 +74,7 @@ export function InventoryList({ attributes, handleCheckboxChange, inventory }) {
   const thead = attributes.map(ths)
 
   return (
-    <Container>
+    <div>
       <Title text="Inventory" />
       <Greeting count={!inventory ? 0 : inventory.length} />
       <Table>
@@ -88,6 +83,6 @@ export function InventoryList({ attributes, handleCheckboxChange, inventory }) {
         </thead>
         <tbody>{tbody}</tbody>
       </Table>
-    </Container>
+    </div>
   )
 }

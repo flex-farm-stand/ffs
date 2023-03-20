@@ -13,8 +13,6 @@ import {
 const Container = styled.div`
   display: flex;
   gap: 0.5rem;
-  margin: 2rem auto;
-  max-width: 600px;
 `
 
 const StyledForm = styled(Form)`

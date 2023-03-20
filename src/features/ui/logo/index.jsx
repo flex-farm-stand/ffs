@@ -7,7 +7,7 @@ const LogoContainer = styled.div`
   color: ${({ color }) => color};
   display: flex;
   justify-content: center;
-  padding: 2px;
+  padding: 3px 0;
   text-align: left;
 `
 
@@ -18,6 +18,7 @@ const LogoText = styled.div`
     font-family: BubblerOne;
     font-size: 1.5rem;
     font-weight: bold;
+    margin-left: 5px;
   }
   div {
     margin -4px 0;

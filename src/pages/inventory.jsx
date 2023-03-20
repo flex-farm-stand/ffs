@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { AddProductForm, InventoryList } from '@/features/inventory'
-import { supabase, useAuth } from '@/features/users'
+import { useSupabaseClient } from '@/features/supabase'
+import { useAuth } from '@/features/users'
+import { CenterAndLimitWidth } from '@/features/ui'
 
 const initialFeedback = { status: '', message: '' }
 const initialName = ''
@@ -25,6 +27,7 @@ export function Inventory() {
   const [loading, setLoading] = useState(true)
   const [name, setName] = useState(initialName)
   const [price, setPrice] = useState(initialPrice)
+  const supabase = useSupabaseClient()
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
@@ -33,7 +36,7 @@ export function Inventory() {
   async function getInventory() {
     const { data, error } = await supabase
       .from('products')
-      .select('name, price, date_added')
+      .select('id, name, price, date_added')
       .eq('seller_id', auth.user.id)
 
     if (error) {
@@ -46,6 +49,7 @@ export function Inventory() {
         name: d.name,
         price: d.price,
         dateAdded: new Date(d.date_added).toDateString(),
+        url: `/product/${d.id}`,
       }))
     )
     setLoading(false)
@@ -68,7 +72,7 @@ export function Inventory() {
       const file = e.target.files[0]
       const fileExt = file.name.split('.').pop()
       // Assign random sequence of fractional digits of [0 < number < 1)
-      const fileName = `public/${Math.random().toString().slice(2)}.${fileExt}`
+      const fileName = `${Math.random().toString().slice(2)}.${fileExt}`
 
       // Query #1 - upload image
       const uploadResponse = await supabase.storage
@@ -80,15 +84,11 @@ export function Inventory() {
       }
       setImageFileName(fileName)
 
-      // Query #2 - obtain URL to image that only works for the next 60 seconds
-      const urlResponse = await supabase.storage
+      const urlResponse = supabase.storage
         .from('product_images')
-        .createSignedUrls([fileName], 60)
+        .getPublicUrl(fileName)
 
-      if (urlResponse.error) {
-        throw urlResponse.error
-      }
-      setImageUrl(urlResponse.data[0].signedUrl)
+      setImageUrl(urlResponse.data.publicUrl)
       setEditing(true)
     } catch (error) {
       setFeedback({ status: 'error', message: error.message })
@@ -131,7 +131,7 @@ export function Inventory() {
 
   return (
     !loading && (
-      <>
+      <CenterAndLimitWidth>
         <AddProductForm
           editing={editing}
           feedback={feedback}
@@ -151,7 +151,7 @@ export function Inventory() {
           handleCheckboxChange={handleCheckboxChange}
           inventory={inventory}
         />
-      </>
+      </CenterAndLimitWidth>
     )
   )
 }

@@ -9,6 +9,7 @@
 drop trigger if exists on_auth_user_created on auth.users;
 drop function if exists public.handle_new_user;
 delete from storage.objects where bucket_id = 'product_images';
+delete from storage.buckets;
 delete from auth.users;
 drop table if exists orders;
 drop table if exists products;
@@ -18,12 +19,15 @@ on storage.objects;
 drop policy if exists "Users can insert jpg/png images into folder"
 on storage.objects;
 
+-- Enable gql infection (display_name -> displayName)
+comment on schema public is '@graphql({"inflect_names": true})';
+
 -- === TABLES ===
 -- *** Storage buckets ***
 insert into storage.buckets
-  (id, name)
+  (id, name, public)
 values
-  ('product_images', 'product_images')
+  ('product_images', 'product_images', true)
 on conflict do nothing;
 
 -- *** Profiles ***
@@ -36,10 +40,10 @@ create table profiles (
 alter table public.profiles enable row level security;
 -- *** Products ***
 create table products (
-id bigint generated always as identity,
+id uuid default uuid_generate_v4(),
 seller_id uuid not null references profiles (id) on delete cascade,
-name varchar(32),
-price decimal,
+name varchar(32) not null,
+price decimal not null,
 available bool,
 image_filename varchar(32),
 date_added timestamptz default now(),
@@ -49,8 +53,8 @@ primary key (id)
 alter table products enable row level security;
 -- *** Orders ***
 create table orders (
-id bigint generated always as identity,
-product_id bigint not null references products (id) on delete restrict,
+id uuid default uuid_generate_v4(),
+product_id uuid not null references products (id) on delete restrict,
 buyer_id uuid not null references profiles (id) on delete restrict,
 seller_id uuid not null references profiles (id) on delete restrict,
 
@@ -64,13 +68,11 @@ create policy "Everyone can view jpg/png images in folder"
 on storage.objects for select
 to public using (
   bucket_id = 'product_images' and
-  lower((storage.foldername(name))[1]) = 'public' and
   storage."extension"(name) in ('jpg', 'jpeg', 'png') );
 create policy "Users can insert jpg/png images into folder"
 on storage.objects for insert
 to authenticated with check (
   bucket_id = 'product_images' and
-  lower((storage.foldername(name))[1]) = 'public' and
   storage."extension"(name) in ('jpg', 'jpeg', 'png') );
 -- *** Profiles ***
 create policy "Public profiles are viewable by everyone."
