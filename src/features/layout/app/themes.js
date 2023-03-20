@@ -1,7 +1,7 @@
 export const themes = {
   light: {
     body: {
-      bg: '#fff',
+      bg: '#f8f9fa',
       text: '#000',
     },
     button: {
@@ -29,11 +29,12 @@ export const themes = {
       text: '#fff',
     },
     menu: {
-      bg: '#ddd',
+      bg: '#ececec',
+      bgHover: '#bbb',
+      bgSelected: '#fff',
       border: '#aaa',
-      hoverBg: '#bbb',
-      selectedBg: '#888',
       text: '#000',
+      textSelected: '#42a97f',
     },
     table: {
       bg: '#ececec',
@@ -72,10 +73,11 @@ export const themes = {
     },
     menu: {
       bg: '#333',
+      bgHover: '#444',
+      bgSelected: '#222',
       border: '#555',
-      hoverBg: '#444',
-      selectedBg: '#222',
       text: '#fff',
+      textSelected: '#42a97f',
     },
     table: {
       bg: '#151515',

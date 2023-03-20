@@ -38,10 +38,10 @@ export const ItemMultiClick = styled(VanillaItemMultiClick).attrs({
     user-select: none;
   }
   button:hover {
-    background-color: ${({ theme }) => theme.menu.hoverBg};
+    background-color: ${({ theme }) => theme.menu.bgHover};
   }
   button.selected {
-    background-color: ${({ theme }) => theme.menu.selectedBg};
+    background-color: ${({ theme }) => theme.menu.bgSelected};
     cursor: unset;
   }
   button:first-child {

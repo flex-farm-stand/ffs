@@ -3,7 +3,8 @@ import { useLocation } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 
 import { LogoLink } from '@/features/ui'
-import { StyledMenu } from './styled-menu'
+import { MenuColor } from './menu-color'
+import { MenuGeneral } from './menu-general'
 
 const pagesWithoutNav = ['/login', '/signup']
 
@@ -15,6 +16,11 @@ const NavBody = styled.div.attrs({ className: 'nav-body' })`
   justify-content: space-between;
   margin: 0 auto;
   max-width: 600px;
+`
+
+const NavBodyRight = styled.div.attrs({ className: 'nav-body-right' })`
+  display: flex;
+  gap: 5px;
 `
 
 // ---
@@ -37,7 +43,10 @@ export function Nav() {
     <NavRoot>
       <NavBody>
         <LogoLink color={themeContext.nav.text} displayText={true} />
-        <StyledMenu />
+        <NavBodyRight>
+          <MenuColor />
+          <MenuGeneral />
+        </NavBodyRight>
       </NavBody>
     </NavRoot>
   )

@@ -1,7 +1,10 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
-function VanillaMenuItem({ className, children, Icon, onClick, to }) {
+function VanillaMenuItem({ active, className, children, icon, onClick, to }) {
+  const location = useLocation()
+  const Icon = icon
+
   const innerElement = to ? (
     <Link to={to}>
       {Icon && <Icon />}
@@ -14,7 +17,15 @@ function VanillaMenuItem({ className, children, Icon, onClick, to }) {
     </button>
   )
 
-  return <li className={className}>{innerElement}</li>
+  return (
+    <li
+      className={`${
+        active || location.pathname === to ? 'selected' : ''
+      } ${className}`}
+    >
+      {innerElement}
+    </li>
+  )
 }
 
 export const Item = styled(VanillaMenuItem).attrs({ className: 'menu-item' })`
@@ -22,7 +33,7 @@ export const Item = styled(VanillaMenuItem).attrs({ className: 'menu-item' })`
     display: block;
     text-decoration: none;
   }
-  a: hover {
+  a:hover {
     text-decoration: none;
   }
   button {
@@ -33,7 +44,6 @@ export const Item = styled(VanillaMenuItem).attrs({ className: 'menu-item' })`
   }
   a,
   button {
-    color: ${({ theme }) => theme.menu.text};
     cursor: pointer;
     display: flex;
     user-select: none;
