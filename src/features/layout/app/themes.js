@@ -17,6 +17,12 @@ export const themes = {
         hoverShadow: 'inset 0 0 0 2rem rgba(0, 0, 0, 0.15)',
         text: '#fff',
       },
+      text: {
+        bg: 'unset',
+        border: 'unset',
+        hoverShadow: 'unset',
+        text: '#000',
+      },
     },
     form: {
       bg: '#fff',
@@ -59,6 +65,12 @@ export const themes = {
         border: 'none',
         hoverShadow: 'inset 0 0 0 2rem rgba(0, 0, 0, 0.15)',
         text: '#fff',
+      },
+      text: {
+        bg: 'unset',
+        border: 'unset',
+        hoverShadow: 'unset',
+        text: '#ddd',
       },
     },
     form: {
