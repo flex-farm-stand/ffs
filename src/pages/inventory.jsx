@@ -1,9 +1,13 @@
+import { gql } from 'graphql-request'
 import { useEffect, useRef, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 import { AddProductForm, InventoryList } from '@/features/inventory'
+import { graphQLClient } from '@/features/gql'
 import { useSupabaseClient } from '@/features/supabase'
 import { useAuth } from '@/features/users'
 import { CenterAndLimitWidth } from '@/features/ui'
+import { capitalize } from '@/features/utils'
 
 const initialFeedback = { status: '', message: '' }
 const initialName = ''
@@ -29,6 +33,7 @@ export function Inventory() {
   const [price, setPrice] = useState(initialPrice)
   const supabase = useSupabaseClient()
   const [uploading, setUploading] = useState(false)
+  const { status, data, error } = useProducts({ sellerId: auth.user.id })
 
   useEffect(() => {
     getInventory()
@@ -148,10 +153,48 @@ export function Inventory() {
         />
         <InventoryList
           attributes={attributes}
+          data={data}
+          error={error}
           handleCheckboxChange={handleCheckboxChange}
           inventory={inventory}
+          status={status}
         />
       </CenterAndLimitWidth>
     )
   )
+}
+
+function useProducts({ sellerId }) {
+  return useQuery({
+    queryKey: ['products', sellerId],
+    queryFn: async () => {
+      const { products } = await graphQLClient.request(
+        gql`
+          query {
+            products: productsCollection(
+              filter: { sellerId: { eq: "${sellerId}" } }
+            ) {
+              edges {
+                node {
+                  id,
+                  name
+                  price
+                  dateAdded
+                }
+              }
+            }
+          }
+        `
+      )
+      return products?.edges.map((d, i) => ({
+        checked: false,
+        index: '' + ++i,
+        name: capitalize(d.node.name),
+        price: '$' + (+d.node.price).toFixed(2),
+        dateAdded: new Date(d.node.dateAdded).toDateString(),
+        url: `/product/${d.node.id}`,
+      }))
+    },
+    retry: false,
+  })
 }
