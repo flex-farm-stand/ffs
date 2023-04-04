@@ -11,7 +11,7 @@ COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_co
 00000000-0000-0000-0000-000000000000	d15d7d4a-9608-4efd-8fb7-737c1cb9432c	authenticated	authenticated	carol@maildrop.cc	$2a$10$L5xw5M9.ZXnzPMVtzLGIJ.3wDpvX4l/tjo92idTGyKgPDvwNa7hs.	2023-02-23 17:42:14.299715+00	\N		2023-02-23 17:41:08.057226+00		\N			\N	2023-02-23 17:42:14.300139+00	{"provider": "email", "providers": ["email"]}	{}	\N	2023-02-23 17:41:08.05474+00	2023-02-23 17:42:14.301239+00	\N	\N			\N		0	\N		\N	f
 \.
 
-update public.profiles set display_name = 'Abbys''s farm'
+update public.profiles set display_name = 'Abby''s farm'
   where id = 'ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a';
 
 insert into public.products
