@@ -176,6 +176,7 @@ function useProducts({ sellerId }) {
             ) {
               edges {
                 node {
+                  id,
                   name
                   price
                   dateAdded
@@ -191,7 +192,7 @@ function useProducts({ sellerId }) {
         name: capitalize(d.node.name),
         price: '$' + (+d.node.price).toFixed(2),
         dateAdded: new Date(d.node.dateAdded).toDateString(),
-        url: `/product/${d.id}`,
+        url: `/product/${d.node.id}`,
       }))
     },
     retry: false,
