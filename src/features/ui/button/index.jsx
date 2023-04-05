@@ -1,8 +1,18 @@
 import styled from 'styled-components'
 
-function VanillaButton({ children, className, onClick, type = 'button' }) {
+function VanillaButton({
+  children,
+  className,
+  disabled = false,
+  onClick,
+  type = 'button',
+}) {
   return (
-    <button className={className} onClick={onClick} type={type}>
+    <button
+      className={className}
+      onClick={disabled ? null : onClick}
+      type={type}
+    >
       {children}
     </button>
   )
@@ -16,7 +26,7 @@ export const Button = styled(VanillaButton).attrs((props) => ({
     border: ${(props) => props.button.border};
     border-radius: 5px;
     color: ${(props) => props.button.text};
-    cursor: pointer;
+    cursor: ${(props) => (props.disabled ? 'unset' : 'pointer')};
     display: flex;
     justify-content: center;
     padding: 0.5rem;
