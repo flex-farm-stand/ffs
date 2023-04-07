@@ -16,6 +16,35 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     initializeAuthProvider()
   }, [])
+  async function initializeAuthProvider() {
+    const session = await retrieveSession()
+    const currentUser = await retrieveUser(session)
+    setUser(currentUser)
+    setLoading(false)
+
+    // Set callback for auth events
+    supabase.auth.onAuthStateChange(async (e, session) => {
+      if (e === 'SIGNED_OUT') {
+        setUser(null)
+      } else if (e === 'SIGNED_IN' || e === 'USER_UPDATED') {
+        const currentUser = await retrieveUser(session)
+        setUser(currentUser)
+      }
+    })
+  }
+  async function loginWithPassword({ email, password }) {
+    const data = await supabase.auth.signInWithPassword({ email, password })
+    return !data.error
+      ? { status: 'success' }
+      : { status: 'failure', message: data.error.message }
+  }
+  async function logout() {
+    const data = await supabase.auth.signOut()
+    setUser(null)
+    return !data.error
+      ? { status: 'success' }
+      : { status: 'failure', message: data.error.message }
+  }
   async function retrieveSession() {
     const {
       data: { session },
@@ -46,35 +75,6 @@ export function AuthProvider({ children }) {
     currentUser.displayName = response.data[0].display_name
 
     return currentUser
-  }
-  async function initializeAuthProvider() {
-    const session = await retrieveSession()
-    const currentUser = await retrieveUser(session)
-    setUser(currentUser)
-    setLoading(false)
-
-    // Set callback for auth events
-    supabase.auth.onAuthStateChange(async (e, session) => {
-      if (e === 'SIGNED_OUT') {
-        setUser(null)
-      } else if (e === 'SIGNED_IN' || e === 'USER_UPDATED') {
-        const currentUser = await retrieveUser(session)
-        setUser(currentUser)
-      }
-    })
-  }
-  async function loginWithPassword({ email, password }) {
-    const data = await supabase.auth.signInWithPassword({ email, password })
-    return !data.error
-      ? { status: 'success' }
-      : { status: 'failure', message: data.error.message }
-  }
-  async function logout() {
-    const data = await supabase.auth.signOut()
-    setUser(null)
-    return !data.error
-      ? { status: 'success' }
-      : { status: 'failure', message: data.error.message }
   }
   async function signUp({ email, password }) {
     const data = await supabase.auth.signUp({

@@ -4,6 +4,7 @@ export const InputLabelPair = forwardRef(
   (
     {
       autoFocus = false,
+      className,
       label = '',
       onChange,
       placeholder = '',
@@ -12,7 +13,7 @@ export const InputLabelPair = forwardRef(
     },
     ref
   ) => (
-    <div className="input-label-pair">
+    <div className={`${className} input-label-pair`}>
       {label && <label>{label}</label>}
       <input
         autoFocus={autoFocus}
