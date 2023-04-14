@@ -5,6 +5,8 @@ import { useSupabaseClient } from '@/features/supabase'
 const signUpSuccessText =
   'Check your email. Email verification needed to complete your sign up.'
 
+const resetPasswordText = 'Please check your email for reset password link'
+
 export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
@@ -31,6 +33,16 @@ export function AuthProvider({ children }) {
         setUser(currentUser)
       }
     })
+  }
+  async function forgotPassword(email) {
+    console.log(email)
+    //Supabase forget password API
+    const data = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:5173/profile',
+    })
+    return !data.error
+      ? { status: 'success', message: resetPasswordText }
+      : { status: 'failure', message: data.error.message }
   }
   async function loginWithPassword({ email, password }) {
     const data = await supabase.auth.signInWithPassword({ email, password })
@@ -88,6 +100,7 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider
       value={{
+        forgotPassword,
         loginWithPassword,
         logout,
         signUp,

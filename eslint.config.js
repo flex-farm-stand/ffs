@@ -10,7 +10,8 @@ export default [
     languageOptions: {
       ...reactRecommended.languageOptions,
       globals: {
-        ...globals.serviceworker, ...globals.browser,
+        ...globals.serviceworker,
+        ...globals.browser,
       },
     },
     settings: {

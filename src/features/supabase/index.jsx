@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 const SupabaseClientContext = createContext(null)
-
+console.log(import.meta.env.VITE_SUPABASE_URL)
 export function SupabaseProvider({ children }) {
   const [client] = useState(() =>
     createClient(
