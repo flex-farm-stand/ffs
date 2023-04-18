@@ -6,13 +6,13 @@
 # Step-0 - Store db connection details
 export PGHOST=localhost
 export PGPASSWORD=your-super-secret-and-long-postgres-password
-export PGPORT=5423
+export PGPORT=5432
 
 # Step-1 - (optional) Wipe db - already included in `create_db.sql` script
-psql --dbname="postgres" --host=$PGHOST --port=$PGHOST --username=postgres -f ./db/wipe_db.sql
+psql --dbname="postgres" --host=$PGHOST --port=$PGPORT --username=postgres -f ./db/wipe_db.sql
 
 # Step-2 - Create db
-psql --dbname="postgres" --host=$PGHOST --port=$PGHOST --username=postgres -f ./db/create_db.sql
+psql --dbname="postgres" --host=$PGHOST --port=$PGPORT --username=postgres -f ./db/create_db.sql
 
 # Step-3 - Seed db
-psql --dbname="postgres" --host=$PGHOST --port=$PGHOST --username=postgres -f ./db/seed_db.sql
+psql --dbname="postgres" --host=$PGHOST --port=$PGPORT --username=postgres -f ./db/seed_db.sql
