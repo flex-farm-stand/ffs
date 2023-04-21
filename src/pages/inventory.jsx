@@ -1,13 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import { fetchProductsBySeller, insertProduct } from '@/features/gql'
 import { AddProductForm, InventoryList } from '@/features/inventory'
-import { useSupabaseClient } from '@/features/supabase'
 import { useAuth } from '@/features/users'
 import { CenterAndLimitWidth } from '@/features/ui'
+import { useSupabaseClient } from '@/features/supabase'
 
+// Initial state
 const initialFeedback = { status: '', message: '' }
 const initialName = ''
 const initialPrice = ''
+
+// Form feedback messages
+const successInsertProduct = 'Added one new product'
+const failureInsertProduct = 'Unable to add new product'
+
+//Attributes of each row of the inventory table
 const attributes = [
   { name: 'checked', Component: () => <input type="checkbox" /> },
   { name: 'index', display: '#' },
@@ -17,49 +26,48 @@ const attributes = [
 ]
 
 export function Inventory() {
+  // Non-state hooks
   const auth = useAuth()
-  const [editing, setEditing] = useState(false)
-  const [feedback, setFeedback] = useState({ status: '', message: '' })
   const inputRef = useRef(null)
+  const supabase = useSupabaseClient()
+
+  // State hooks
+  const [checkMarks, setCheckMarks] = useState([])
+  const [editing, setEditing] = useState(false)
+  const [feedback, setFeedback] = useState(initialFeedback)
   const [imageFileName, setImageFileName] = useState('')
   const [imageUrl, setImageUrl] = useState('')
-  const [inventory, setInventory] = useState([])
-  const [loading, setLoading] = useState(true)
   const [name, setName] = useState(initialName)
   const [price, setPrice] = useState(initialPrice)
-  const supabase = useSupabaseClient()
   const [uploading, setUploading] = useState(false)
 
-  useEffect(() => {
-    getInventory()
-  }, [])
-  async function getInventory() {
-    const { data, error } = await supabase
-      .from('products')
-      .select('id, name, price, date_added')
-      .eq('seller_id', auth.user.id)
-
-    if (error) {
-      throw new Error('Unable to query products table')
-    }
-    setInventory(
-      data.map((d, i) => ({
-        checked: false,
-        index: '' + ++i,
-        name: d.name,
-        price: d.price,
-        dateAdded: new Date(d.date_added).toDateString(),
-        url: `/product/${d.id}`,
-      }))
-    )
-    setLoading(false)
+  // GQL hooks
+  const newProduct = useMutation({
+    mutationFn: (product) => insertProduct(product),
+    onSuccess: () => {
+      setFeedback(initialFeedback)
+      queryClient.invalidateQueries({ queryKey: ['productsBySeller'] })
+      setFeedback({ status: 'success', message: successInsertProduct })
+    },
+    onError: (err) => {
+      console.error(err.message)
+      setFeedback({ status: 'error', message: failureInsertProduct })
+    },
+  })
+  const productList = useQueryToFetchProductList({ sellerId: auth.user.id })
+  const queryClient = useQueryClient()
+  function useQueryToFetchProductList({ sellerId }) {
+    return useQuery({
+      onSuccess: (data) => setCheckMarks(Array(data.length).fill(false)),
+      queryFn: () => fetchProductsBySeller({ sellerId }),
+      queryKey: ['productsBySeller', sellerId],
+      retry: false,
+    })
   }
+
+  // State handlers
   function handleCheckboxChange(index) {
-    setInventory(
-      inventory.map((item) =>
-        item.index === index ? { ...item, checked: !item.checked } : item
-      )
-    )
+    setCheckMarks(checkMarks.map((cm, i) => (i === index ? !cm : cm)))
   }
   async function handleFileChange(e) {
     try {
@@ -74,7 +82,6 @@ export function Inventory() {
       // Assign random sequence of fractional digits of [0 < number < 1)
       const fileName = `${Math.random().toString().slice(2)}.${fileExt}`
 
-      // Query #1 - upload image
       const uploadResponse = await supabase.storage
         .from('product_images')
         .upload(fileName, file)
@@ -96,31 +103,28 @@ export function Inventory() {
       setUploading(false)
     }
   }
-  function handlePriceChange(e) {
-    setPrice(e.target.value)
-    setEditing(true)
-  }
   function handleNameChange(e) {
     setName(e.target.value)
     setEditing(true)
   }
-  async function onInsert(e) {
+  function handlePriceChange(e) {
+    setPrice(e.target.value)
+    setEditing(true)
+  }
+
+  // Misc callbacks
+  function onSubmitNewProduct(e) {
     e.preventDefault()
-    const data = await supabase.from('products').insert({
-      seller_id: auth.user.id,
+    newProduct.mutate({
+      available: true,
+      imageFileName,
       name,
       price,
-      available: true,
-      image_filename: imageFileName,
+      retrieveAccessToken: auth.retrieveAccessToken,
+      sellerId: auth.user.id,
     })
-
-    if (data.error) {
-      throw new Error('Unable to insert into products table')
-    }
-    resetForm()
-    getInventory()
   }
-  function resetForm() {
+  function resetFormNewProduct() {
     setName(initialName)
     setPrice(initialPrice)
     setImageUrl('')
@@ -130,28 +134,27 @@ export function Inventory() {
   }
 
   return (
-    !loading && (
-      <CenterAndLimitWidth>
-        <AddProductForm
-          editing={editing}
-          feedback={feedback}
-          handleFileChange={handleFileChange}
-          handleNameChange={handleNameChange}
-          handlePriceChange={handlePriceChange}
-          imageUrl={imageUrl}
-          inputRef={inputRef}
-          name={name}
-          onInsert={onInsert}
-          price={price}
-          reset={resetForm}
-          uploading={uploading}
-        />
-        <InventoryList
-          attributes={attributes}
-          handleCheckboxChange={handleCheckboxChange}
-          inventory={inventory}
-        />
-      </CenterAndLimitWidth>
-    )
+    <CenterAndLimitWidth>
+      <AddProductForm
+        editing={editing}
+        feedback={feedback}
+        handleFileChange={handleFileChange}
+        handleNameChange={handleNameChange}
+        handlePriceChange={handlePriceChange}
+        imageUrl={imageUrl}
+        inputRef={inputRef}
+        name={name}
+        onSubmit={onSubmitNewProduct}
+        price={price}
+        reset={resetFormNewProduct}
+        uploading={uploading}
+      />
+      <InventoryList
+        attributes={attributes}
+        checkMarks={checkMarks}
+        handleCheckboxChange={handleCheckboxChange}
+        productList={productList}
+      />
+    </CenterAndLimitWidth>
   )
 }

@@ -52,24 +52,24 @@ const SidePanel = styled.div`
   }
 `
 
-export function ProductDetails({ status, data, error }) {
+export function ProductDetails({ product }) {
   const supabase = useSupabaseClient()
   return (
     <div>
-      {status === 'loading' ? (
+      {product.status === 'loading' ? (
         'Loading...'
-      ) : status === 'error' ? (
-        <span>Error: {error.message}</span>
+      ) : product.status === 'error' ? (
+        <span>Error: {product.error.message}</span>
       ) : (
         <Container>
-          <NameTop>{capitalize(data.name)}</NameTop>
-          {data.imageFilename ? (
+          <NameTop>{capitalize(product.data.name)}</NameTop>
+          {product.data.imageFilename ? (
             <div>
               <ProductImage
                 src={
                   supabase.storage
                     .from('product_images')
-                    .getPublicUrl(data.imageFilename).data.publicUrl
+                    .getPublicUrl(product.data.imageFilename).data.publicUrl
                 }
               />
             </div>
@@ -77,9 +77,9 @@ export function ProductDetails({ status, data, error }) {
             <FillerImage>Image unavailable</FillerImage>
           )}
           <SidePanel>
-            <Name>{capitalize(data.name)}</Name>
-            <div>{'$' + data.price}</div>
-            <div>Sold by: {data.seller.displayName}</div>
+            <Name>{capitalize(product.data.name)}</Name>
+            <div>{'$' + product.data.price}</div>
+            <div>Sold by: {product.data.seller.displayName}</div>
           </SidePanel>
         </Container>
       )}
