@@ -37,11 +37,17 @@ const StyledForm = styled(Form)`
   }
 `
 
-const InputLabelPairShifted = styled(InputLabelPair)``
+const InputLabelPairShifted = styled(InputLabelPair)`
+  order: 1;
+`
 
-const FormFeedbackShifted = styled(FormFeedback)``
+const FormFeedbackShifted = styled(FormFeedback)`
+  order: 1;
+`
 
-const FlexBetweenAndReorderShifted = styled(FlexBetweenAndReorder)``
+const FlexBetweenAndReorderShifted = styled(FlexBetweenAndReorder)`
+  order: 1;
+`
 
 export function LoginForm({
   email,
@@ -50,6 +56,7 @@ export function LoginForm({
   handlePasswordChange,
   onSubmit,
   password,
+  resetPassword,
 }) {
   const themeContext = useContext(ThemeContext)
 
@@ -82,7 +89,7 @@ export function LoginForm({
       </FlexBetweenAndReorderShifted>
       <DetachedLabel>
         <label>Password</label>
-        <Button disabled={true} style="text">
+        <Button style="text" onClick={resetPassword}>
           Forgot password?
         </Button>
       </DetachedLabel>
