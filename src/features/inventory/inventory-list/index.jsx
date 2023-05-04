@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Title } from '@/features/ui'
-import { capitalize } from '@/features/utils'
 
 const emptyInventoryText = 'There are no items in your inventory at the moment.'
 
@@ -39,50 +38,69 @@ const Table = styled.table`
   }
 `
 
-// Helper functions for mapping over
-//  - table heading attributes
-//  - table row values
-//  - table rows
-const ths = ({ name, display, Component }) => (
-  <th key={name}>{display || <Component />}</th>
-)
-
-export function InventoryList({ attributes, handleCheckboxChange, inventory }) {
-  const tbody = inventory.map((item) => (
-    <tr key={item.index}>
-      {attributes.map(({ name }) =>
-        name === 'price' ? (
-          <td key={name}>{'$' + item[name].toFixed(2)}</td>
-        ) : name === 'name' ? (
-          <td key={name}>
-            <Link to={item.url}>{capitalize(item[name])}</Link>
-          </td>
-        ) : name === 'checked' ? (
-          <td key={name}>
+function TableBody({ attributes, checkMarks, data, handleCheckboxChange }) {
+  const inner = data.map((d, i) => (
+    <tr key={i}>
+      {attributes.map(({ name }) => (
+        <td key={name}>
+          {name === 'name' ? (
+            <Link to={d.url}>{d[name]}</Link>
+          ) : name === 'checked' ? (
             <input
-              onChange={() => handleCheckboxChange(item.index)}
+              checked={checkMarks[i] ? 'checked' : ''}
+              onChange={() => handleCheckboxChange(i)}
               type="checkbox"
-              checked={item[name]}
             />
-          </td>
-        ) : (
-          <td key={name}>{capitalize(item[name])}</td>
-        )
-      )}
+          ) : (
+            d[name]
+          )}
+        </td>
+      ))}
     </tr>
   ))
-  const thead = attributes.map(ths)
 
+  return <tbody>{inner}</tbody>
+}
+
+function TableHead({ attributes }) {
+  const inner = attributes.map(({ Component, name, display }) => (
+    <th key={name}>{display || <Component />}</th>
+  ))
+
+  return (
+    <thead>
+      <tr>{inner}</tr>
+    </thead>
+  )
+}
+
+export function InventoryList({
+  attributes,
+  checkMarks,
+  handleCheckboxChange,
+  productList,
+}) {
   return (
     <div>
       <Title text="Inventory" />
-      <Greeting count={!inventory ? 0 : inventory.length} />
-      <Table>
-        <thead>
-          <tr>{thead}</tr>
-        </thead>
-        <tbody>{tbody}</tbody>
-      </Table>
+      {productList.status === 'loading' ? (
+        'Loading...'
+      ) : productList.status === 'error' ? (
+        <span>Error: {productList.error.message}</span>
+      ) : (
+        <>
+          <Greeting count={!productList.data ? 0 : productList.data.length} />
+          <Table>
+            <TableHead attributes={attributes} />
+            <TableBody
+              attributes={attributes}
+              checkMarks={checkMarks}
+              data={productList.data}
+              handleCheckboxChange={handleCheckboxChange}
+            />
+          </Table>
+        </>
+      )}
     </div>
   )
 }

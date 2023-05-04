@@ -45,6 +45,12 @@ export function AuthProvider({ children }) {
       ? { status: 'success' }
       : { status: 'failure', message: data.error.message }
   }
+  async function retrieveAccessToken() {
+    const session = await retrieveSession()
+    const accessToken = session?.access_token
+
+    return accessToken
+  }
   async function retrieveSession() {
     const {
       data: { session },
@@ -90,6 +96,8 @@ export function AuthProvider({ children }) {
       value={{
         loginWithPassword,
         logout,
+        retrieveAccessToken,
+        retrieveSession,
         signUp,
         user,
       }}

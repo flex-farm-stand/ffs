@@ -80,14 +80,14 @@ export function AddProductForm({
   imageUrl,
   inputRef,
   name,
-  onInsert,
+  onSubmit,
   price,
   reset,
   uploading,
 }) {
   return (
     <Container>
-      <StyledForm onSubmit={onInsert}>
+      <StyledForm onSubmit={onSubmit}>
         <FlexBetween>
           <Title text="Add product" />
           {editing && (
