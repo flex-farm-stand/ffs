@@ -20,7 +20,10 @@ export function Login() {
     const result = await auth.loginWithPassword({ email, password })
     setFormFeedback(result)
   }
-
+  async function handleForgotPassword() {
+    const result = await auth.forgotPassword(email)
+    setFormFeedback(result)
+  }
   return auth.user ? (
     <Navigate to="/profile" />
   ) : (
@@ -31,6 +34,7 @@ export function Login() {
       handlePasswordChange={handlePasswordChange}
       onSubmit={onSubmit}
       password={password}
+      resetPassword={handleForgotPassword}
     />
   )
 }
