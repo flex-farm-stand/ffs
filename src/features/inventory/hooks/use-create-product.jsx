@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { createClient } from '@/features/gql/graphql-client'
+import { createGraphQLClient } from '@/features/utils'
 
 async function createProduct({
   retrieveAccessToken,
@@ -12,7 +12,7 @@ async function createProduct({
   sellerId,
 }) {
   const accessToken = await retrieveAccessToken()
-  const gqlClient = createClient(accessToken)
+  const gqlClient = createGraphQLClient(accessToken)
   const { newProduct } = await gqlClient.request(gql`
     mutation {
       newProduct: insertIntoProductsCollection(

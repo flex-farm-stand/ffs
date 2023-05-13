@@ -1,10 +1,10 @@
 import { gql } from 'graphql-request'
 import { useQuery } from '@tanstack/react-query'
 
-import { createClient } from '@/features/gql/graphql-client'
+import { createGraphQLClient } from '@/features/utils'
 
 async function fetchProductById({ productId }) {
-  const gqlClient = createClient()
+  const gqlClient = createGraphQLClient()
   const { products } = await gqlClient.request(gql`
     query {
       products: productsCollection(
