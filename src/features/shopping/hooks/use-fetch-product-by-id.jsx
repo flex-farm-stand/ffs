@@ -1,8 +1,9 @@
 import { gql } from 'graphql-request'
+import { useQuery } from '@tanstack/react-query'
 
-import { createClient } from './graphql-client'
+import { createClient } from '@/features/gql/graphql-client'
 
-export async function fetchOneProduct({ productId }) {
+async function fetchProductById({ productId }) {
   const gqlClient = createClient()
   const { products } = await gqlClient.request(gql`
     query {
@@ -25,4 +26,12 @@ export async function fetchOneProduct({ productId }) {
   `)
 
   return products?.edges[0].node
+}
+
+export function useFetchProductById({ productId }) {
+  return useQuery({
+    queryKey: ['product', productId],
+    queryFn: () => fetchProductById({ productId }),
+    retry: false,
+  })
 }

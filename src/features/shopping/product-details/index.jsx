@@ -52,24 +52,25 @@ const SidePanel = styled.div`
   }
 `
 
-export function ProductDetails({ product }) {
+export function ProductDetails({ fetchProductById }) {
   const supabase = useSupabaseClient()
   return (
     <div>
-      {product.status === 'loading' ? (
+      {fetchProductById.status === 'loading' ? (
         'Loading...'
-      ) : product.status === 'error' ? (
-        <span>Error: {product.error.message}</span>
+      ) : fetchProductById.status === 'error' ? (
+        <span>Error: {fetchProductById.error.message}</span>
       ) : (
         <Container>
-          <NameTop>{capitalize(product.data.name)}</NameTop>
-          {product.data.imageFilename ? (
+          <NameTop>{capitalize(fetchProductById.data.name)}</NameTop>
+          {fetchProductById.data.imageFilename ? (
             <div>
               <ProductImage
                 src={
                   supabase.storage
                     .from('product_images')
-                    .getPublicUrl(product.data.imageFilename).data.publicUrl
+                    .getPublicUrl(fetchProductById.data.imageFilename).data
+                    .publicUrl
                 }
               />
             </div>
@@ -77,9 +78,9 @@ export function ProductDetails({ product }) {
             <FillerImage>Image unavailable</FillerImage>
           )}
           <SidePanel>
-            <Name>{capitalize(product.data.name)}</Name>
-            <div>{'$' + product.data.price}</div>
-            <div>Sold by: {product.data.seller.displayName}</div>
+            <Name>{capitalize(fetchProductById.data.name)}</Name>
+            <div>{'$' + fetchProductById.data.price}</div>
+            <div>Sold by: {fetchProductById.data.seller.displayName}</div>
           </SidePanel>
         </Container>
       )}
