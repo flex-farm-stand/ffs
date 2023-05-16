@@ -1,8 +1,11 @@
 import { useRef, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { fetchProductsBySeller, insertProduct } from '@/features/gql'
-import { AddProductForm, InventoryList } from '@/features/inventory'
+import {
+  useCreateProduct,
+  useFetchProductsBySeller,
+  AddProductForm,
+  InventoryList,
+} from '@/features/inventory'
 import { useAuth } from '@/features/users'
 import { CenterAndLimitWidth } from '@/features/ui'
 import { useSupabaseClient } from '@/features/supabase'
@@ -42,28 +45,16 @@ export function Inventory() {
   const [uploading, setUploading] = useState(false)
 
   // GQL hooks
-  const newProduct = useMutation({
-    mutationFn: (product) => insertProduct(product),
-    onSuccess: () => {
-      setFeedback(initialFeedback)
-      queryClient.invalidateQueries({ queryKey: ['productsBySeller'] })
-      setFeedback({ status: 'success', message: successInsertProduct })
-    },
-    onError: (err) => {
-      console.error(err.message)
-      setFeedback({ status: 'error', message: failureInsertProduct })
-    },
+  const createProductMutation = useCreateProduct({
+    failureInsertProduct,
+    initialFeedback,
+    setFeedback,
+    successInsertProduct,
   })
-  const productList = useQueryToFetchProductList({ sellerId: auth.user.id })
-  const queryClient = useQueryClient()
-  function useQueryToFetchProductList({ sellerId }) {
-    return useQuery({
-      onSuccess: (data) => setCheckMarks(Array(data.length).fill(false)),
-      queryFn: () => fetchProductsBySeller({ sellerId }),
-      queryKey: ['productsBySeller', sellerId],
-      retry: false,
-    })
-  }
+  const fetchProductsBySeller = useFetchProductsBySeller({
+    sellerId: auth.user.id,
+    setCheckMarks,
+  })
 
   // State handlers
   function handleCheckboxChange(index) {
@@ -115,7 +106,7 @@ export function Inventory() {
   // Misc callbacks
   function onSubmitNewProduct(e) {
     e.preventDefault()
-    newProduct.mutate({
+    createProductMutation.mutate({
       available: true,
       imageFileName,
       name,
@@ -153,7 +144,7 @@ export function Inventory() {
         attributes={attributes}
         checkMarks={checkMarks}
         handleCheckboxChange={handleCheckboxChange}
-        productList={productList}
+        fetchProductsBySeller={fetchProductsBySeller}
       />
     </CenterAndLimitWidth>
   )

@@ -2,7 +2,7 @@ import { GraphQLClient } from 'graphql-request'
 
 const endpoint = `${import.meta.env.VITE_SUPABASE_URL}/graphql/v1`
 
-export function createClient(accessToken) {
+export function createGraphQLClient(accessToken) {
   const headers = {
     apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
   }

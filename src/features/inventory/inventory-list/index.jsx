@@ -77,25 +77,31 @@ function TableHead({ attributes }) {
 export function InventoryList({
   attributes,
   checkMarks,
+  fetchProductsBySeller,
   handleCheckboxChange,
-  productList,
 }) {
   return (
     <div>
       <Title text="Inventory" />
-      {productList.status === 'loading' ? (
+      {fetchProductsBySeller.status === 'loading' ? (
         'Loading...'
-      ) : productList.status === 'error' ? (
-        <span>Error: {productList.error.message}</span>
+      ) : fetchProductsBySeller.status === 'error' ? (
+        <span>Error: {fetchProductsBySeller.error.message}</span>
       ) : (
         <>
-          <Greeting count={!productList.data ? 0 : productList.data.length} />
+          <Greeting
+            count={
+              !fetchProductsBySeller.data
+                ? 0
+                : fetchProductsBySeller.data.length
+            }
+          />
           <Table>
             <TableHead attributes={attributes} />
             <TableBody
               attributes={attributes}
               checkMarks={checkMarks}
-              data={productList.data}
+              data={fetchProductsBySeller.data}
               handleCheckboxChange={handleCheckboxChange}
             />
           </Table>
