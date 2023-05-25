@@ -6,7 +6,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Nav } from '@/features/layout'
 import { SupabaseProvider } from '@/features/supabase'
 import { DarkModeContext, useDarkMode } from '@/features/ui'
-import { AuthProvider } from '@/features/users'
 import { GlobalStyle } from './global-style'
 import { themes } from './themes'
 
@@ -23,20 +22,18 @@ export function App() {
 
   return (
     <SupabaseProvider>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <DarkModeContext.Provider value={{ theme, effectiveTheme, setTheme }}>
-            <ThemeProvider theme={themes[effectiveTheme]}>
-              <div className="app">
-                <GlobalStyle />
-                <Nav />
-                <Outlet />
-              </div>
-            </ThemeProvider>
-          </DarkModeContext.Provider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <DarkModeContext.Provider value={{ theme, effectiveTheme, setTheme }}>
+          <ThemeProvider theme={themes[effectiveTheme]}>
+            <div className="app">
+              <GlobalStyle />
+              <Nav />
+              <Outlet />
+            </div>
+          </ThemeProvider>
+        </DarkModeContext.Provider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </SupabaseProvider>
   )
 }

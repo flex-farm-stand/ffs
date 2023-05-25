@@ -4,7 +4,7 @@ import { MdOutlineLogin, MdOutlineLogout, MdSell } from 'react-icons/md'
 import styled from 'styled-components'
 
 import { Menu } from '@/features/ui'
-import { useAuth } from '@/features/users'
+import { useIsAuthenticated, useLogout } from '@/features/users'
 
 const optionsLoggedIn = [
   {
@@ -75,24 +75,27 @@ const StyledMenuItems = styled(Menu.Items)`
 `
 
 export function MenuGeneral() {
-  const auth = useAuth()
-  const options = auth.user ? optionsLoggedIn : optionsLoggedOut
+  const { data, isLoading } = useIsAuthenticated()
+  const logoutMutation = useLogout()
+  const options = data ? optionsLoggedIn : optionsLoggedOut
 
   return (
     <Menu>
       <StyledMenuButton />
-      <StyledMenuItems>
-        {options.map(({ displayName, icon, name, to }) => (
-          <ItemGeneral
-            displayName={displayName}
-            icon={icon}
-            key={displayName}
-            name={name}
-            onClick={name === 'logout' ? auth.logout : null}
-            to={to}
-          />
-        ))}
-      </StyledMenuItems>
+      {!isLoading && (
+        <StyledMenuItems>
+          {options.map(({ displayName, icon, name, to }) => (
+            <ItemGeneral
+              displayName={displayName}
+              icon={icon}
+              key={displayName}
+              name={name}
+              onClick={name === 'logout' ? logoutMutation.mutate : null}
+              to={to}
+            />
+          ))}
+        </StyledMenuItems>
+      )}
     </Menu>
   )
 }

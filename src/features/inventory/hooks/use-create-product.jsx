@@ -1,17 +1,17 @@
 import { gql } from 'graphql-request'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { useCurrentUser } from '@/features/users'
 import { createGraphQLClient } from '@/features/utils'
 
 async function createProduct({
-  retrieveAccessToken,
+  accessToken,
   available,
   imageFileName,
   name,
   price,
   sellerId,
 }) {
-  const accessToken = await retrieveAccessToken()
   const gqlClient = createGraphQLClient(accessToken)
   const { newProduct } = await gqlClient.request(gql`
     mutation {
@@ -43,21 +43,32 @@ async function createProduct({
 
 export function useCreateProduct({
   failureInsertProduct,
-  initialFeedback,
-  setFeedback,
+  setFormFeedback,
   successInsertProduct,
 }) {
+  const { data: user } = useCurrentUser()
   const queryClient = useQueryClient()
+
+  const userId = user?.id
+  const userAccessToken = user?.accessToken
+
   return useMutation({
-    mutationFn: (product) => createProduct(product),
+    mutationFn: ({ available, imageFileName, name, price }) =>
+      createProduct({
+        accessToken: userAccessToken,
+        available,
+        imageFileName,
+        name,
+        price,
+        sellerId: userId,
+      }),
     onSuccess: () => {
-      setFeedback(initialFeedback)
       queryClient.invalidateQueries({ queryKey: ['productsBySeller'] })
-      setFeedback({ status: 'success', message: successInsertProduct })
+      setFormFeedback({ status: 'success', message: successInsertProduct })
     },
     onError: (err) => {
       console.error(err.message)
-      setFeedback({ status: 'error', message: failureInsertProduct })
+      setFormFeedback({ status: 'error', message: failureInsertProduct })
     },
   })
 }

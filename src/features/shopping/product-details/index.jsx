@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import { capitalize } from '@/features/utils'
-import { useSupabaseClient } from '@/features/supabase'
 
 const Container = styled.div`
   display: flex;
@@ -52,35 +51,29 @@ const SidePanel = styled.div`
   }
 `
 
-export function ProductDetails({ fetchProductById }) {
-  const supabase = useSupabaseClient()
+export function ProductDetails({
+  productById: { data, error, isError, isLoading },
+}) {
   return (
     <div>
-      {fetchProductById.status === 'loading' ? (
+      {isLoading ? (
         'Loading...'
-      ) : fetchProductById.status === 'error' ? (
-        <span>Error: {fetchProductById.error.message}</span>
+      ) : isError ? (
+        <span>Error: {error.message}</span>
       ) : (
         <Container>
-          <NameTop>{capitalize(fetchProductById.data.name)}</NameTop>
-          {fetchProductById.data.imageFilename ? (
+          <NameTop>{capitalize(data.name)}</NameTop>
+          {data.imageFilename ? (
             <div>
-              <ProductImage
-                src={
-                  supabase.storage
-                    .from('product_images')
-                    .getPublicUrl(fetchProductById.data.imageFilename).data
-                    .publicUrl
-                }
-              />
+              <ProductImage src={data.imageUrl} />
             </div>
           ) : (
             <FillerImage>Image unavailable</FillerImage>
           )}
           <SidePanel>
-            <Name>{capitalize(fetchProductById.data.name)}</Name>
-            <div>{'$' + fetchProductById.data.price}</div>
-            <div>Sold by: {fetchProductById.data.seller.displayName}</div>
+            <Name>{capitalize(data.name)}</Name>
+            <div>{'$' + data.price}</div>
+            <div>Sold by: {data.seller.displayName}</div>
           </SidePanel>
         </Container>
       )}

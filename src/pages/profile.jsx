@@ -1,9 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useSupabaseClient } from '@/features/supabase'
 import { CenterAndLimitWidth } from '@/features/ui'
-import { AccountForm, ProfileForm, useAuth } from '@/features/users'
+import { AccountForm, ProfileForm } from '@/features/users'
 
+import {
+  useCurrentUserProfile,
+  useUpdateUserEmail,
+  useUpdateUserPassword,
+  useUpdateUserProfile,
+} from '@/features/users'
+
+// Form feedback messages
 const successEmailChange =
   'Check your email - both the old and new email addresses. Two email ' +
   'verifications links need to be clicked to confirm the change you requested.'
@@ -12,15 +19,37 @@ const successNameChange = 'Your name has been updated'
 const initialFeedback = { status: '', message: '' }
 
 export function Profile() {
-  const auth = useAuth()
+  // State hooks
   const [editingAccount, setEditingAccount] = useState(false)
   const [editingProfile, setEditingProfile] = useState(false)
-  const [email, setEmail] = useState(auth.user.email)
+  const [email, setEmail] = useState('')
   const [feedbackAccount, setFeedbackAccount] = useState(initialFeedback)
   const [feedbackProfile, setFeedbackProfile] = useState(initialFeedback)
-  const [name, setName] = useState(auth.user.displayName || '')
+  const [name, setName] = useState('')
   const [password, setPassword] = useState('')
-  const supabase = useSupabaseClient()
+
+  // Fetching hooks
+  const { data: user, error, isError, isLoading } = useCurrentUserProfile()
+  const updateUserEmailMutation = useUpdateUserEmail({
+    setFormFeedback: setFeedbackAccount,
+    successEmailChange,
+  })
+  const updateUserPasswordMutation = useUpdateUserPassword({
+    setFormFeedback: setFeedbackAccount,
+    successPasswordChange,
+  })
+  const updateUserProfileMutation = useUpdateUserProfile({
+    setFormFeedback: setFeedbackProfile,
+    successNameChange,
+  })
+
+  // Misc hooks
+  // Needed to assign initial value, as mentioned here:
+  // https://stackoverflow.com/a/70500870
+  useEffect(() => {
+    setEmail(user?.email || '')
+    setName(user?.displayName || '')
+  }, [user])
 
   function handleDisplayNameChange(e) {
     setName(e.target.value)
@@ -34,71 +63,57 @@ export function Profile() {
     setPassword(e.target.value)
     setEditingAccount(true)
   }
-  async function onSubmitAccount(e) {
+  function onSubmitAccount(e) {
     e.preventDefault()
-    setFeedbackAccount(initialFeedback)
-    const emailChange = email && email !== auth.user.email
-    const profile = {
-      email,
-      password,
-    }
-    const result = await supabase.auth.updateUser(profile)
-
+    const emailChange = email && email !== user.email
+    emailChange
+      ? updateUserEmailMutation.mutate({ email, password })
+      : updateUserPasswordMutation.mutate({ email, password })
     setEditingAccount(false)
-    setFeedbackAccount(
-      result.error
-        ? { status: 'failure', message: result.error.message }
-        : {
-            status: 'success',
-            message: emailChange ? successEmailChange : successPasswordChange,
-          }
-    )
   }
   async function onSubmitProfile(e) {
     e.preventDefault()
-    setFeedbackProfile(initialFeedback)
-    const result = await supabase
-      .from('profiles')
-      .update({ display_name: name })
-      .eq('id', auth.user.id)
-
+    updateUserProfileMutation.mutate({ displayName: name })
     setEditingProfile(false)
-    setFeedbackProfile(
-      result.error
-        ? { status: 'failure', message: result.error.message }
-        : { status: 'success', message: successNameChange }
-    )
   }
   function resetAccount() {
-    setEmail(auth.user.email)
+    setEmail(user.email)
     setPassword('')
     setEditingAccount(false)
   }
   function resetProfile() {
-    setName(auth.user.displayName || '')
+    setName(user.displayName || '')
     setEditingProfile(false)
   }
 
   return (
     <CenterAndLimitWidth>
-      <AccountForm
-        editing={editingAccount}
-        email={email}
-        formFeedback={feedbackAccount}
-        handleEmailChange={handleEmailChange}
-        handlePasswordChange={handlePasswordChange}
-        onSubmit={onSubmitAccount}
-        password={password}
-        reset={resetAccount}
-      />
-      <ProfileForm
-        editing={editingProfile}
-        formFeedback={feedbackProfile}
-        handleDisplayNameChange={handleDisplayNameChange}
-        name={name}
-        onSubmit={onSubmitProfile}
-        reset={resetProfile}
-      />
+      {isLoading ? (
+        'Loading...'
+      ) : isError ? (
+        <p>Error: {error.message}</p>
+      ) : (
+        <>
+          <AccountForm
+            editing={editingAccount}
+            email={email}
+            formFeedback={feedbackAccount}
+            handleEmailChange={handleEmailChange}
+            handlePasswordChange={handlePasswordChange}
+            onSubmit={onSubmitAccount}
+            password={password}
+            reset={resetAccount}
+          />
+          <ProfileForm
+            editing={editingProfile}
+            formFeedback={feedbackProfile}
+            handleDisplayNameChange={handleDisplayNameChange}
+            name={name}
+            onSubmit={onSubmitProfile}
+            reset={resetProfile}
+          />
+        </>
+      )}
     </CenterAndLimitWidth>
   )
 }

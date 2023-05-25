@@ -2,13 +2,12 @@ import { useRef, useState } from 'react'
 
 import {
   useCreateProduct,
-  useFetchProductsBySeller,
+  useProductsBySeller,
+  useUploadProductImage,
   AddProductForm,
   InventoryList,
 } from '@/features/inventory'
-import { useAuth } from '@/features/users'
 import { CenterAndLimitWidth } from '@/features/ui'
-import { useSupabaseClient } from '@/features/supabase'
 
 // Initial state
 const initialFeedback = { status: '', message: '' }
@@ -18,6 +17,7 @@ const initialPrice = ''
 // Form feedback messages
 const successInsertProduct = 'Added one new product'
 const failureInsertProduct = 'Unable to add new product'
+const failureUploadProductImage = 'No image selected for upload'
 
 //Attributes of each row of the inventory table
 const attributes = [
@@ -29,70 +29,46 @@ const attributes = [
 ]
 
 export function Inventory() {
-  // Non-state hooks
-  const auth = useAuth()
-  const inputRef = useRef(null)
-  const supabase = useSupabaseClient()
-
   // State hooks
   const [checkMarks, setCheckMarks] = useState([])
   const [editing, setEditing] = useState(false)
-  const [feedback, setFeedback] = useState(initialFeedback)
+  const [formFeedback, setFormFeedback] = useState(initialFeedback)
   const [imageFileName, setImageFileName] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [name, setName] = useState(initialName)
   const [price, setPrice] = useState(initialPrice)
   const [uploading, setUploading] = useState(false)
 
+  // Misc hooks
+  const inputRef = useRef(null)
+
   // GQL hooks
   const createProductMutation = useCreateProduct({
     failureInsertProduct,
-    initialFeedback,
-    setFeedback,
+    setFormFeedback,
     successInsertProduct,
   })
-  const fetchProductsBySeller = useFetchProductsBySeller({
-    sellerId: auth.user.id,
+  const productsBySeller = useProductsBySeller({
     setCheckMarks,
+  })
+  const uploadProductImageMutation = useUploadProductImage({
+    setFormFeedback,
+    setImageFileName,
+    setImageUrl,
+    setUploading,
   })
 
   // State handlers
   function handleCheckboxChange(index) {
     setCheckMarks(checkMarks.map((cm, i) => (i === index ? !cm : cm)))
   }
-  async function handleFileChange(e) {
-    try {
-      setUploading(true)
-      setFeedback(initialFeedback)
-
-      if (!e.target.files || e.target.files.length === 0) {
-        throw new Error('No image selected for upload')
-      }
-      const file = e.target.files[0]
-      const fileExt = file.name.split('.').pop()
-      // Assign random sequence of fractional digits of [0 < number < 1)
-      const fileName = `${Math.random().toString().slice(2)}.${fileExt}`
-
-      const uploadResponse = await supabase.storage
-        .from('product_images')
-        .upload(fileName, file)
-
-      if (uploadResponse.error) {
-        throw uploadResponse.error
-      }
-      setImageFileName(fileName)
-
-      const urlResponse = supabase.storage
-        .from('product_images')
-        .getPublicUrl(fileName)
-
-      setImageUrl(urlResponse.data.publicUrl)
-      setEditing(true)
-    } catch (error) {
-      setFeedback({ status: 'error', message: error.message })
-    } finally {
-      setUploading(false)
+  function handleFileChange(e) {
+    setEditing(true)
+    if (!e.target.files || e.target.files.length === 0) {
+      setFormFeedback({ status: 'error', message: failureUploadProductImage })
+      return
     }
+    uploadProductImageMutation.mutate({ file: e.target.files[0] })
   }
   function handleNameChange(e) {
     setName(e.target.value)
@@ -111,8 +87,6 @@ export function Inventory() {
       imageFileName,
       name,
       price,
-      retrieveAccessToken: auth.retrieveAccessToken,
-      sellerId: auth.user.id,
     })
   }
   function resetFormNewProduct() {
@@ -128,7 +102,7 @@ export function Inventory() {
     <CenterAndLimitWidth>
       <AddProductForm
         editing={editing}
-        feedback={feedback}
+        formFeedback={formFeedback}
         handleFileChange={handleFileChange}
         handleNameChange={handleNameChange}
         handlePriceChange={handlePriceChange}
@@ -144,7 +118,7 @@ export function Inventory() {
         attributes={attributes}
         checkMarks={checkMarks}
         handleCheckboxChange={handleCheckboxChange}
-        fetchProductsBySeller={fetchProductsBySeller}
+        productsBySeller={productsBySeller}
       />
     </CenterAndLimitWidth>
   )
