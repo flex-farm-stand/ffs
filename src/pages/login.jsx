@@ -1,13 +1,27 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
-import { LoginForm, useAuth } from '@/features/users'
+import {
+  useIsAuthenticated,
+  useForgotPassword,
+  useLoginWithPassword,
+  LoginForm,
+} from '@/features/users'
+
+const successForgotPassword = 'Please check your email for reset password link'
 
 export function Login() {
-  const auth = useAuth()
   const [email, setEmail] = useState('')
   const [formFeedback, setFormFeedback] = useState({ status: '', message: '' })
   const [password, setPassword] = useState('')
+
+  // Fetching hooks
+  const forgotPasswordMutation = useForgotPassword({
+    setFormFeedback,
+    successForgotPassword,
+  })
+  const { data, error, isError, isLoading } = useIsAuthenticated()
+  const loginMutation = useLoginWithPassword({ setFormFeedback })
 
   function handleEmailChange(e) {
     setEmail(e.target.value)
@@ -17,14 +31,17 @@ export function Login() {
   }
   async function onSubmit(e) {
     e.preventDefault()
-    const result = await auth.loginWithPassword({ email, password })
-    setFormFeedback(result)
+    loginMutation.mutate({ email, password })
   }
   async function handleForgotPassword() {
-    const result = await auth.forgotPassword(email)
-    setFormFeedback(result)
+    forgotPasswordMutation.mutate({ email })
   }
-  return auth.user ? (
+
+  return isLoading ? (
+    <div>Loading</div>
+  ) : isError ? (
+    <div>Error: {error.message}</div>
+  ) : data ? (
     <Navigate to="/profile" />
   ) : (
     <LoginForm

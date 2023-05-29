@@ -1,10 +1,10 @@
 import { gql } from 'graphql-request'
 import { useQuery } from '@tanstack/react-query'
 
-import { capitalize } from '@/features/utils'
-import { createGraphQLClient } from '@/features/utils'
+import { useCurrentUser } from '@/features/users'
+import { capitalize, createGraphQLClient } from '@/features/utils'
 
-async function fetchProductsBySeller({ sellerId }) {
+async function productsBySeller({ sellerId }) {
   const gqlClient = createGraphQLClient()
   const { products } = await gqlClient.request(gql`
     query {
@@ -32,10 +32,14 @@ async function fetchProductsBySeller({ sellerId }) {
   }))
 }
 
-export function useFetchProductsBySeller({ sellerId, setCheckMarks }) {
+export function useProductsBySeller({ setCheckMarks }) {
+  const { data: user } = useCurrentUser()
+  const sellerId = user?.id
+
   return useQuery({
+    enabled: !!sellerId,
     onSuccess: (data) => setCheckMarks(Array(data.length).fill(false)),
-    queryFn: () => fetchProductsBySeller({ sellerId }),
+    queryFn: () => productsBySeller({ sellerId }),
     queryKey: ['productsBySeller', sellerId],
     retry: false,
   })

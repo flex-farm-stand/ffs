@@ -1,9 +1,10 @@
 import { gql } from 'graphql-request'
 import { useQuery } from '@tanstack/react-query'
 
+import { useSupabaseClient } from '@/features/supabase'
 import { createGraphQLClient } from '@/features/utils'
 
-async function fetchProductById({ productId }) {
+async function productById({ productId, supabase }) {
   const gqlClient = createGraphQLClient()
   const { products } = await gqlClient.request(gql`
     query {
@@ -25,13 +26,27 @@ async function fetchProductById({ productId }) {
     }
   `)
 
-  return products?.edges[0].node
+  const product = products.edges[0].node
+
+  // Include URL to product image in returned object
+  if (product.imageFilename) {
+    const {
+      data: { publicUrl },
+    } = supabase.storage
+      .from('product_images')
+      .getPublicUrl(product.imageFilename)
+    product.imageUrl = publicUrl
+  }
+
+  return product
 }
 
-export function useFetchProductById({ productId }) {
+export function useProductById({ productId }) {
+  const supabase = useSupabaseClient()
+
   return useQuery({
     queryKey: ['product', productId],
-    queryFn: () => fetchProductById({ productId }),
+    queryFn: () => productById({ productId, supabase }),
     retry: false,
   })
 }

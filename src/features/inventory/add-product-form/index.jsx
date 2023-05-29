@@ -73,7 +73,7 @@ const ImagePreview = styled.div`
 
 export function AddProductForm({
   editing,
-  feedback,
+  formFeedback,
   handleFileChange,
   handleNameChange,
   handlePriceChange,
@@ -129,7 +129,7 @@ export function AddProductForm({
           onChange={handleFileChange}
           type="file"
         />
-        <FormFeedback feedback={feedback} />
+        <FormFeedback feedback={formFeedback} />
       </StyledForm>
       <ImagePreview>{imageUrl && <img src={imageUrl} />}</ImagePreview>
     </Container>

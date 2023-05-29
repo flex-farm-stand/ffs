@@ -1,13 +1,20 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
-import { SignUpForm, useAuth } from '@/features/users'
+import { useIsAuthenticated, useSignUp, SignUpForm } from '@/features/users'
+
+const successSignUp =
+  'Check your email. Email verification needed to complete your sign up.'
 
 export function SignUp() {
-  const auth = useAuth()
+  // State hooks
   const [email, setEmail] = useState('')
   const [formFeedback, setFormFeedback] = useState({ status: '', message: '' })
   const [password, setPassword] = useState('')
+
+  // Fetch hook
+  const { data, error, isError, isLoading } = useIsAuthenticated()
+  const signUpMutation = useSignUp({ setFormFeedback, successSignUp })
 
   function handleEmailChange(e) {
     setEmail(e.target.value)
@@ -17,11 +24,14 @@ export function SignUp() {
   }
   async function onSubmit(e) {
     e.preventDefault()
-    const result = await auth.signUp({ email, password })
-    setFormFeedback(result)
+    signUpMutation.mutate({ email, password })
   }
 
-  return auth.user ? (
+  return isLoading ? (
+    'Loading...'
+  ) : isError ? (
+    <div>Error: {error.message}</div>
+  ) : data ? (
     <Navigate to="/profile" />
   ) : (
     <SignUpForm

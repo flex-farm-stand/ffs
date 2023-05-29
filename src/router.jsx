@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom'
 
 import { App } from '@/features/layout'
-import { RequireAuth } from '@/features/users'
+import { ProtectedWrapper } from '@/features/users'
 import * as pages from '@/pages'
 
 const elements = (
@@ -15,18 +15,18 @@ const elements = (
     <Route
       path="/inventory"
       element={
-        <RequireAuth>
+        <ProtectedWrapper>
           <pages.Inventory />
-        </RequireAuth>
+        </ProtectedWrapper>
       }
     />
     <Route path="/product/:id" element={<pages.Product />} />
     <Route
       path="/profile"
       element={
-        <RequireAuth>
+        <ProtectedWrapper>
           <pages.Profile />
-        </RequireAuth>
+        </ProtectedWrapper>
       }
     />
     <Route path="/login" element={<pages.Login />} />
