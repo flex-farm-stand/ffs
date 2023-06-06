@@ -26,7 +26,6 @@ async function ordersAsABuyer({ accessToken, buyerId }) {
       }
     }
   `)
-  console.log(orders)
 
   return orders?.edges.map(({ node: order }) => ({
     date: new Date(order.dateAdded).toDateString(),
