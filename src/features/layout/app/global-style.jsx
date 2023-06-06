@@ -13,7 +13,6 @@ export const GlobalStyle = createGlobalStyle`
   a:hover {
     text-decoration: underline;
   }
-  input:focus,
   button:focus {
     outline: 2px solid powderblue !important;
   }

@@ -1,6 +1,7 @@
+import { MdOutlineClose } from 'react-icons/md'
 import styled from 'styled-components'
 
-import { Title } from '@/features/ui'
+import { Button, Title } from '@/features/ui'
 
 const emptyListText = "You haven't made any orders so far."
 
@@ -15,8 +16,18 @@ const FillerIcon = styled.div`
   width: 85px;
 `
 
-function Greeting({ count }) {
-  return <p>{count ? `You have made ${count} orders.` : emptyListText}</p>
+function Greeting({ count, countFiltered, query }) {
+  return (
+    <p>
+      {query
+        ? `Showing ${countFiltered} order${
+            countFiltered > 1 ? 's' : ''
+          } that matched your query.`
+        : count
+        ? `You have made ${count} orders.`
+        : emptyListText}
+    </p>
+  )
 }
 
 const List = styled.ul`
@@ -62,6 +73,51 @@ const List = styled.ul`
   }
 `
 
+function VanillaListFilter({
+  className,
+  filterRef,
+  onChange,
+  query,
+  resetQuery,
+}) {
+  return (
+    <div className={className}>
+      <input
+        onChange={onChange}
+        placeholder="Search by ID or Seller"
+        ref={filterRef}
+        type="text"
+        value={query}
+      />
+      <Button onClick={resetQuery} style="text">
+        <MdOutlineClose />
+      </Button>
+    </div>
+  )
+}
+
+const ListFilter = styled(VanillaListFilter)`
+  & {
+    border: 1px solid ${({ theme }) => theme.form.border};
+    border-radius: 5px;
+    display: flex;
+    padding: 5px;
+  }
+  &:focus-within {
+    outline: 2px solid powderblue;
+  }
+  input {
+    background-color: unset;
+    border: none;
+    color: ${({ theme }) => theme.body.text};
+    flex-grow: 2;
+    margin-right: 5px;
+  }
+  input:focus {
+    outline: none;
+  }
+`
+
 function ListItem({ order: { date, id, price, seller } }) {
   return (
     <li>
@@ -93,8 +149,21 @@ function ListItem({ order: { date, id, price, seller } }) {
 }
 
 export function OrderList({
+  filterRef,
+  onChangeQuery,
   ordersAsABuyer: { data, error, isError, isLoading },
+  query,
+  resetQuery,
 }) {
+  const ordersFiltered = data?.filter(matchesIdOrSeller)
+  const orders = query ? ordersFiltered : data
+
+  function matchesIdOrSeller({ id, seller }) {
+    return (
+      id.startsWith(query) || seller.toLowerCase().includes(query.toLowerCase())
+    )
+  }
+
   return (
     <div>
       <Title text="Orders" />
@@ -104,9 +173,19 @@ export function OrderList({
         <span>Error: {error.message}</span>
       ) : (
         <>
-          <Greeting count={!data ? 0 : data.length} />
+          <Greeting
+            count={data.length}
+            countFiltered={ordersFiltered.length}
+            query={query}
+          />
+          <ListFilter
+            filterRef={filterRef}
+            onChange={onChangeQuery}
+            query={query}
+            resetQuery={resetQuery}
+          />
           <List>
-            {data.map((order) => (
+            {orders.map((order) => (
               <ListItem key={order.id} order={order} />
             ))}
           </List>
