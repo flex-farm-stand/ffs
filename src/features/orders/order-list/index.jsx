@@ -98,7 +98,9 @@ function VanillaListFilter({
 
 const ListFilter = styled(VanillaListFilter)`
   & {
-    border: 1px solid ${({ theme }) => theme.form.border};
+    border: 1px solid
+      ${(props) =>
+        props.query ? props.theme.body.text : props.theme.form.border};
     border-radius: 5px;
     display: flex;
     padding: 5px;
@@ -109,12 +111,16 @@ const ListFilter = styled(VanillaListFilter)`
   input {
     background-color: unset;
     border: none;
-    color: ${({ theme }) => theme.body.text};
     flex-grow: 2;
     margin-right: 5px;
   }
   input:focus {
     outline: none;
+  }
+  input,
+  button {
+    color: ${(props) =>
+      props.query ? props.theme.body.text : props.theme.form.border};
   }
 `
 
