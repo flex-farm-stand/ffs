@@ -13,6 +13,7 @@ const FillerIcon = styled.div`
   font-size: 0.9rem;
   height: 85px;
   text-align: center;
+  user-select: none;
   width: 85px;
 `
 
