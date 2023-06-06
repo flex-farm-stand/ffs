@@ -1,6 +1,11 @@
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { FaRegUser } from 'react-icons/fa'
-import { MdOutlineLogin, MdOutlineLogout, MdSell } from 'react-icons/md'
+import {
+  MdBusinessCenter,
+  MdOutlineLogin,
+  MdOutlineLogout,
+  MdSell,
+} from 'react-icons/md'
 import styled from 'styled-components'
 
 import { Menu } from '@/features/ui'
@@ -12,6 +17,12 @@ const optionsLoggedIn = [
     icon: MdSell,
     name: 'inventory',
     to: '/inventory',
+  },
+  {
+    displayName: 'Orders',
+    icon: MdBusinessCenter,
+    name: 'orders',
+    to: '/orders',
   },
   {
     displayName: 'Profile',
