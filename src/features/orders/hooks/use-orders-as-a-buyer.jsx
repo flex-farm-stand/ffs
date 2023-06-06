@@ -43,7 +43,7 @@ export function useOrdersAsABuyer() {
   return useQuery({
     enabled: !!buyerId,
     queryFn: () => ordersAsABuyer({ accessToken, buyerId }),
-    queryKey: ['ordersAsBuyer'],
+    queryKey: ['ordersAsABuyer'],
     retry: false,
   })
 }
