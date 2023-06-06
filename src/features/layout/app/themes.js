@@ -3,6 +3,7 @@ export const themes = {
     body: {
       bg: '#f8f9fa',
       text: '#000',
+      dim: '#ccc',
     },
     button: {
       regular: {
@@ -52,6 +53,7 @@ export const themes = {
     body: {
       bg: '#222',
       text: '#ddd',
+      dim: '#555',
     },
     button: {
       regular: {
