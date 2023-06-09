@@ -20,23 +20,14 @@ update public.profiles set display_name = 'Barbara''s bistro'
   where id = '99bb0f2f-d996-420d-bbf5-31a934337876';
 
 -- Products
-insert into public.products
-  (seller_id, name, price, available, date_added)
-values
-  ('ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a', 'green grapes', 1.99, true, now()),
-  ('ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a', 'red grapes', 1.49, true, now()),
-  ('ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a', 'jersey tomato', 2.15, true, now());
+COPY public.products (id, seller_id, name, price, available, image_filename, date_added) FROM stdin;
+f2297025-8818-47b2-b3ca-ce73a68e26ad	ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a	green grapes	1.99	t	\N	2023-06-07 14:12:11.775125+00
+1129b36e-7cff-46a9-9d0a-d2cfc05ddb4e	ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a	red grapes	1.49	t	\N	2023-06-07 14:12:11.775125+00
+b7e0b3c2-0fe3-455d-bc6d-65e75f1608fd	ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a	jersey tomato	2.15	t	\N	2023-06-07 14:12:11.775125+00
+\.
 
 -- Orders
--- 1
-insert into public.orders
-  (product_id, buyer_id, seller_id, date_added)
-select id, '99bb0f2f-d996-420d-bbf5-31a934337876', 'ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a', now()
-from  public.products
-where seller_id = 'ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a' and name = 'green grapes';
--- 2
-insert into public.orders
-  (product_id, buyer_id, seller_id, date_added)
-select id, '99bb0f2f-d996-420d-bbf5-31a934337876', 'ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a', now()
-from  public.products
-where seller_id = 'ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a' and name = 'jersey tomato';
+COPY public.orders (id, product_id, buyer_id, seller_id, date_added) FROM stdin;
+52d31842-f0e1-40d3-b46e-0ce9b78d23fb	f2297025-8818-47b2-b3ca-ce73a68e26ad	99bb0f2f-d996-420d-bbf5-31a934337876	ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a	2023-06-07 14:12:11.77667+00
+34dbe013-bbe6-4ee0-8cad-6cf13e473ed9	b7e0b3c2-0fe3-455d-bc6d-65e75f1608fd	99bb0f2f-d996-420d-bbf5-31a934337876	ed5fc1e5-3be9-4cbc-bcfe-9ac2b746d32a	2023-06-07 14:12:11.778056+00
+\.
