@@ -8,7 +8,7 @@ async function getCurrentUser({ supabase }) {
   } = await supabase.auth.getSession()
 
   if (!session) {
-    throw new Error('User is not authenticated')
+    return false
   }
 
   const user = {

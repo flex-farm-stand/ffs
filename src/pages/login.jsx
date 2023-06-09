@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
 import {
-  useIsAuthenticated,
+  useCurrentUser,
   useForgotPassword,
   useLoginWithPassword,
   LoginForm,
@@ -20,7 +20,7 @@ export function Login() {
     setFormFeedback,
     successForgotPassword,
   })
-  const { data, error, isError, isLoading } = useIsAuthenticated()
+  const { data: user, error, isError, isLoading } = useCurrentUser()
   const loginMutation = useLoginWithPassword({ setFormFeedback })
 
   function handleEmailChange(e) {
@@ -41,7 +41,7 @@ export function Login() {
     <div>Loading</div>
   ) : isError ? (
     <div>Error: {error.message}</div>
-  ) : data ? (
+  ) : user ? (
     <Navigate to="/profile" />
   ) : (
     <LoginForm
