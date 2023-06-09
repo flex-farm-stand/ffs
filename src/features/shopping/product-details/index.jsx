@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import { Button, FormFeedback } from '@/features/ui'
 import { capitalize } from '@/features/utils'
 
 const Container = styled.div`
@@ -17,6 +18,7 @@ const FillerImage = styled.div`
   display: flex;
   justify-content: center;
   height: 200px;
+  user-select: none;
   width: 200px;
 `
 
@@ -52,6 +54,8 @@ const SidePanel = styled.div`
 `
 
 export function ProductDetails({
+  formFeedback,
+  onClick,
   productById: { data, error, isError, isLoading },
 }) {
   return (
@@ -74,6 +78,10 @@ export function ProductDetails({
             <Name>{capitalize(data.name)}</Name>
             <div>{'$' + data.price}</div>
             <div>Sold by: {data.seller.displayName}</div>
+            <Button onClick={onClick} style="primary">
+              Buy now
+            </Button>
+            <FormFeedback feedback={formFeedback} />
           </SidePanel>
         </Container>
       )}
