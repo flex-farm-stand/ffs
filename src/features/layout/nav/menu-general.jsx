@@ -9,7 +9,7 @@ import {
 import styled from 'styled-components'
 
 import { Menu } from '@/features/ui'
-import { useIsAuthenticated, useLogout } from '@/features/users'
+import { useCurrentUser, useLogout } from '@/features/users'
 
 const optionsLoggedIn = [
   {
@@ -86,9 +86,9 @@ const StyledMenuItems = styled(Menu.Items)`
 `
 
 export function MenuGeneral() {
-  const { data, isLoading } = useIsAuthenticated()
+  const { data: user, isLoading } = useCurrentUser()
   const logoutMutation = useLogout()
-  const options = data ? optionsLoggedIn : optionsLoggedOut
+  const options = user ? optionsLoggedIn : optionsLoggedOut
 
   return (
     <Menu>

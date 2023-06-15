@@ -1,7 +1,6 @@
 export { useCurrentUser } from './use-current-user'
 export { useCurrentUserProfile } from './use-current-user-profile'
 export { useForgotPassword } from './use-forgot-password'
-export { useIsAuthenticated } from './use-is-authenticated'
 export { useLoginWithPassword } from './use-login-with-password'
 export { useLogout } from './use-logout'
 export { useSignUp } from './use-sign-up'

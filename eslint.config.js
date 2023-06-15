@@ -1,16 +1,18 @@
 import globals from 'globals'
 import prettier from 'eslint-plugin-prettier'
 import reactRecommended from 'eslint-plugin-react/configs/recommended.js'
+import js from '@eslint/js'
 
 export default [
-  'eslint:recommended',
+  js.configs.recommended,
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     ...reactRecommended,
     languageOptions: {
       ...reactRecommended.languageOptions,
       globals: {
-        ...globals.serviceworker, ...globals.browser,
+        ...globals.serviceworker,
+        ...globals.browser,
       },
     },
     settings: {

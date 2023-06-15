@@ -1,2 +1,2 @@
-export { useProductById } from './hooks/use-product-by-id'
+export * from './hooks'
 export { ProductDetails } from './product-details'
