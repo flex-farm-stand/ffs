@@ -3,21 +3,8 @@
 --
 -- This is meant to be run either
 --    - in the Supabase SQL Editor tool
---    - via the psql command line tool (see the file: commands.sh)
+--    - via the psql command line tool (see the file: init_db.sh)
 --
--- CLEAN UP
-drop trigger if exists on_auth_user_created on auth.users;
-drop function if exists public.handle_new_user;
-delete from storage.objects where bucket_id = 'product_images';
-delete from storage.buckets;
-delete from auth.users;
-drop table if exists orders;
-drop table if exists products;
-drop table if exists profiles;
-drop policy if exists "Everyone can view jpg/png images in folder"
-on storage.objects;
-drop policy if exists "Users can insert jpg/png images into folder"
-on storage.objects;
 
 -- Enable gql infection (display_name -> displayName)
 comment on schema public is '@graphql({"inflect_names": true})';
@@ -57,6 +44,7 @@ create table orders (
   product_id uuid not null references products (id) on delete restrict,
   buyer_id uuid not null references profiles (id) on delete restrict,
   seller_id uuid not null references profiles (id) on delete restrict,
+  date_added timestamptz default now(),
 
   primary key (id)
 );

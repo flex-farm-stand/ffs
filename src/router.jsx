@@ -20,6 +20,14 @@ const elements = (
         </ProtectedWrapper>
       }
     />
+    <Route
+      path="/orders"
+      element={
+        <ProtectedWrapper>
+          <pages.Orders />
+        </ProtectedWrapper>
+      }
+    />
     <Route path="/product/:id" element={<pages.Product />} />
     <Route
       path="/profile"
