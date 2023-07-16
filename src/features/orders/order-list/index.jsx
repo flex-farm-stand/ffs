@@ -2,85 +2,11 @@ import { MdOutlineClose } from 'react-icons/md'
 import styled from 'styled-components'
 
 import { Button, Title } from '@/features/ui'
+import { capitalize, parseDate } from '@/features/utils'
 
 const emptyListText = "You haven't made any orders so far."
 
-const FillerIcon = styled.div`
-  align-items: center;
-  background-color: #ddd;
-  color: red;
-  display: flex;
-  font-size: 0.9rem;
-  height: 85px;
-  text-align: center;
-  user-select: none;
-  width: 85px;
-`
-
-function Greeting({ count, countFiltered, query }) {
-  return (
-    <p>
-      {query
-        ? `Showing ${countFiltered} order${
-            countFiltered > 1 ? 's' : ''
-          } that matched your query.`
-        : count
-        ? `You have made ${count} orders.`
-        : emptyListText}
-    </p>
-  )
-}
-
-const List = styled.ul`
-  & {
-    list-style: none;
-    padding: 0;
-  }
-  article {
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 85px 1fr 1fr;
-    grid-template-areas: 'icon detail-1 detail-2';
-    grid-gap: 8px;
-    justify-items: start;
-    align-items: center;
-  }
-  li {
-    border-bottom: 1px solid ${({ theme }) => theme.body.dim};
-    margin: 1rem 0;
-    padding-bottom: 16px;
-  }
-  li:last-child {
-    border-bottom: none;
-  }
-  .icon {
-    grid-area: icon;
-  }
-  .detail-1 {
-    grid-area: detail-1;
-  }
-  .detail-1 {
-    grid-area: detail-1;
-  }
-
-  @media (width < 480px) {
-    article {
-      grid-template-rows: 1fr 1fr;
-      grid-template-columns: 85px 1fr;
-      grid-template-areas:
-        'icon detail-1'
-        'icon detail-2';
-    }
-  }
-`
-
-function VanillaListFilter({
-  className,
-  filterRef,
-  onChange,
-  query,
-  resetQuery,
-}) {
+function VanillaFilter({ className, filterRef, onChange, query, resetQuery }) {
   return (
     <div className={className}>
       <input
@@ -97,11 +23,11 @@ function VanillaListFilter({
   )
 }
 
-const ListFilter = styled(VanillaListFilter)`
+const Filter = styled(VanillaFilter)`
   & {
     border: 1px solid
       ${(props) =>
-        props.query ? props.theme.body.text : props.theme.form.border};
+        props.query ? props.theme.body.secondary : props.theme.body.dim};
     border-radius: 5px;
     display: flex;
     padding: 5px;
@@ -125,31 +51,124 @@ const ListFilter = styled(VanillaListFilter)`
   }
 `
 
-function ListItem({ order: { date, id, price, seller } }) {
+function Greeting({ count, countFiltered, query }) {
+  return (
+    <p>
+      {query
+        ? `Showing ${countFiltered} order${
+            countFiltered > 1 ? 's' : ''
+          } that matched your query.`
+        : count
+        ? `You have made ${count} orders.`
+        : emptyListText}
+    </p>
+  )
+}
+
+function VanillaIcon({ className, imageUrl }) {
+  return <img alt="Order icon" className={`icon ${className}`} src={imageUrl} />
+}
+const Icon = styled(VanillaIcon)`
+  max-height: 85px;
+  max-width: 85px;
+`
+
+function VanillaIconFiller({ className }) {
+  return <div className={`icon ${className}`}>Icon Missing</div>
+}
+const IconFiller = styled(VanillaIconFiller)`
+  align-items: center;
+  background-color: ${({ theme }) => theme.missing.bg};
+  color: ${({ theme }) => theme.missing.text};
+  display: flex;
+  font-size: 0.9rem;
+  height: 85px;
+  text-align: center;
+  user-select: none;
+  width: 85px;
+`
+
+const List = styled.ul`
+  & {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    margin-top: 16px;
+  }
+  article {
+    border: 2px solid ${({ theme }) => theme.body.dim};
+    border-radius: 5px;
+  }
+  section {
+    display: flex;
+  }
+  section.heading {
+    & {
+      background-color: ${({ theme }) => theme.menu.bg};
+      border-bottom: 2px solid ${({ theme }) => theme.body.dim};
+      border-radius: 5px 5px 0 0;
+      font-size: 0.8rem;
+      padding: 8px;
+    }
+    & > div {
+      margin-right: 15px;
+    }
+    & > div:last-child {
+      flex-grow: 1;
+      margin-right: 0;
+      text-align: right;
+    }
+    .title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+  }
+  section.body {
+    & {
+      align-items: center;
+    }
+    .icon {
+      margin: 8px;
+    }
+    .seller {
+      font-size: 0.8rem;
+    }
+    .seller label {
+      color: ${({ theme }) => theme.body.secondary};
+    }
+  }
+`
+
+function ListItem({ order: { date, id, imageUrl, name, price, seller } }) {
+  const formattedDate = parseDate(date)
   return (
     <li>
       <article>
-        <FillerIcon className="icon">Icon Missing</FillerIcon>
-        <div className="detail-1">
+        <section className="heading">
           <div>
-            <b>Order ID: </b>
-            {id.slice(0, 5)}
+            <div className="title">Order placed</div>
+            <div>{formattedDate}</div>
           </div>
           <div>
-            <b>Date: </b>
-            {date}
-          </div>
-        </div>
-        <div className="detail-2">
-          <div>
-            <b>Seller: </b>
-            {seller}
+            <div className="title">Total</div>
+            <div>{price}</div>
           </div>
           <div>
-            <b>Total: </b>
-            {price}
+            <div className="title">Order # {id.slice(0, 5)}</div>
           </div>
-        </div>
+        </section>
+        <section className="body">
+          {imageUrl ? <Icon imageUrl={imageUrl} /> : <IconFiller />}
+          <div>
+            <div>{capitalize(name)}</div>
+            <div className="seller">
+              <label>Sold by: </label>
+              <span>{seller}</span>
+            </div>
+          </div>
+        </section>
       </article>
     </li>
   )
@@ -185,7 +204,7 @@ export function OrderList({
             countFiltered={ordersFiltered.length}
             query={query}
           />
-          <ListFilter
+          <Filter
             filterRef={filterRef}
             onChange={onChangeQuery}
             query={query}

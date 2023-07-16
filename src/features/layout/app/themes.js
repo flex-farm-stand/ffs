@@ -2,8 +2,9 @@ export const themes = {
   light: {
     body: {
       bg: '#f8f9fa',
+      dim: '#ddd',
+      secondary: '#555',
       text: '#000',
-      dim: '#ccc',
     },
     button: {
       regular: {
@@ -43,6 +44,10 @@ export const themes = {
       text: '#000',
       textSelected: '#42a97f',
     },
+    missing: {
+      bg: '#ddd',
+      text: 'red',
+    },
     table: {
       bg: '#ececec',
       bgHover: '#ccc',
@@ -52,8 +57,9 @@ export const themes = {
   dark: {
     body: {
       bg: '#222',
+      dim: '#444',
+      secondary: '#888',
       text: '#ddd',
-      dim: '#555',
     },
     button: {
       regular: {
@@ -92,6 +98,10 @@ export const themes = {
       border: '#555',
       text: '#fff',
       textSelected: '#42a97f',
+    },
+    missing: {
+      bg: '#444',
+      text: 'red',
     },
     table: {
       bg: '#151515',
