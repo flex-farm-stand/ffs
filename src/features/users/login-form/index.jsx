@@ -92,7 +92,7 @@ export function LoginForm({
         <Button style="primary" type="submit">
           Login
         </Button>
-        <Link to="/signup">Create account</Link>
+        <Link to="/signup">Sign up instead</Link>
       </FlexBetweenAndReorderShifted>
       <DetachedLabel>
         <label>Password</label>
