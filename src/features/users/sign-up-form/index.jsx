@@ -12,6 +12,18 @@ import {
   Title,
 } from '@/features/ui'
 
+const DetachedLabel = styled.div`
+  & {
+    display: flex;
+    font-size: 0.9rem;
+    justify-content: space-between;
+  }
+  button {
+    font-size: 0.9rem;
+    padding: 0;
+  }
+`
+
 const StyledForm = styled(Form)`
   & {
     border: 1px solid ${({ theme }) => theme.form.border};
@@ -32,6 +44,18 @@ const StyledForm = styled(Form)`
   }
 `
 
+const InputLabelPairShifted = styled(InputLabelPair)`
+  order: 1;
+`
+
+const FormFeedbackShifted = styled(FormFeedback)`
+  order: 1;
+`
+
+const FlexBetweenAndReorderShifted = styled(FlexBetweenAndReorder)`
+  order: 1;
+`
+
 export function SignUpForm({
   email,
   formFeedback,
@@ -46,26 +70,32 @@ export function SignUpForm({
     <StyledForm onSubmit={onSubmit}>
       <LogoLink color={themeContext.form.title} displayText={true} />
       <Title text="Sign up" />
+      <DetachedLabel>
+        <label>Email</label>
+      </DetachedLabel>
       <InputLabelPair
         autoFocus={true}
-        placeholder="Enter email"
+        onChange={handleEmailChange}
+        placeholder="you@example.com"
         type="email"
         value={email}
-        onChange={handleEmailChange}
       />
-      <InputLabelPair
-        placeholder="Enter password"
+      <InputLabelPairShifted
+        onChange={handlePasswordChange}
+        placeholder="••••••••"
         type="password"
         value={password}
-        onChange={handlePasswordChange}
       />
-      <FormFeedback feedback={formFeedback} />
-      <FlexBetweenAndReorder>
+      <FormFeedbackShifted feedback={formFeedback} />
+      <FlexBetweenAndReorderShifted>
         <Button style="primary" type="submit">
-          Create
+          Sign up
         </Button>
         <Link to="/login">Login instead</Link>
-      </FlexBetweenAndReorder>
+      </FlexBetweenAndReorderShifted>
+      <DetachedLabel>
+        <label>Password</label>
+      </DetachedLabel>
     </StyledForm>
   )
 }
