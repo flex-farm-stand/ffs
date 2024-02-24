@@ -16,9 +16,16 @@ const StyledForm = styled(Form)`
   & {
     border: 1px solid ${({ theme }) => theme.form.border};
     border-radius: 5px;
-    margin: 20% auto;
-    max-width: 300px;
+    height: 16rem;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -10rem; /* subtract height/2 + padding */
     padding: 2rem;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 16rem;
   }
   input {
     width: calc(100% - 0.8rem);
