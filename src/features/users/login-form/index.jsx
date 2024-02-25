@@ -28,20 +28,23 @@ const StyledForm = styled(Form)`
   & {
     border: 1px solid ${({ theme }) => theme.form.border};
     border-radius: 5px;
-    height: 16rem;
-    left: 0;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: -10rem; /* subtract height/2 + padding */
     padding: 2rem;
-    position: absolute;
-    right: 0;
-    top: 50%;
     width: 16rem;
   }
   input {
     width: calc(100% - 0.8rem);
   }
+`
+
+const FormWrapper = styled.div`
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 `
 
 const InputLabelPairShifted = styled(InputLabelPair)`
@@ -68,38 +71,40 @@ export function LoginForm({
   const themeContext = useContext(ThemeContext)
 
   return (
-    <StyledForm onSubmit={onSubmit}>
-      <LogoLink color={themeContext.form.title} displayText={true} />
-      <Title text="Login" />
-      <DetachedLabel>
-        <label>Email</label>
-      </DetachedLabel>
-      <InputLabelPair
-        autoFocus={true}
-        onChange={handleEmailChange}
-        placeholder="you@example.com"
-        type="email"
-        value={email}
-      />
-      <InputLabelPairShifted
-        onChange={handlePasswordChange}
-        placeholder="••••••••"
-        type="password"
-        value={password}
-      />
-      <FormFeedbackShifted feedback={formFeedback} />
-      <FlexBetweenAndReorderShifted>
-        <Button style="primary" type="submit">
-          Login
-        </Button>
-        <Link to="/signup">Sign up instead</Link>
-      </FlexBetweenAndReorderShifted>
-      <DetachedLabel>
-        <label>Password</label>
-        <Button style="text" onClick={resetPassword}>
-          Forgot password?
-        </Button>
-      </DetachedLabel>
-    </StyledForm>
+    <FormWrapper>
+      <StyledForm onSubmit={onSubmit}>
+        <LogoLink color={themeContext.form.title} displayText={true} />
+        <Title text="Login" />
+        <DetachedLabel>
+          <label>Email</label>
+        </DetachedLabel>
+        <InputLabelPair
+          autoFocus={true}
+          onChange={handleEmailChange}
+          placeholder="you@example.com"
+          type="email"
+          value={email}
+        />
+        <InputLabelPairShifted
+          onChange={handlePasswordChange}
+          placeholder="••••••••"
+          type="password"
+          value={password}
+        />
+        <FormFeedbackShifted feedback={formFeedback} />
+        <FlexBetweenAndReorderShifted>
+          <Button style="primary" type="submit">
+            Login
+          </Button>
+          <Link to="/signup">Sign up instead</Link>
+        </FlexBetweenAndReorderShifted>
+        <DetachedLabel>
+          <label>Password</label>
+          <Button style="text" onClick={resetPassword}>
+            Forgot password?
+          </Button>
+        </DetachedLabel>
+      </StyledForm>
+    </FormWrapper>
   )
 }
